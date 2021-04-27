@@ -1,0 +1,26 @@
+{
+  "APP_TITLE": "Meterage Management System",
+  "search": "Search",
+  "reset": "Reset",
+  "add": "Add",
+  "edit": "Edit",
+  "delete": "Delete",
+  "refresh": "Refresh",
+  "density": "Density",
+  "columnSetting": "Columns Setting",
+  "tableSize": {
+    "default": "Default",
+    "middle": "Middle",
+    "small": "Small"
+  },
+  "total": "Total",
+  "range": "Range",
+  "changePassword": "Change Password",
+  "logout": "Logout",
+  "input": "Input",
+  "save": "Save",
+  "cancel": "Cancel",
+  "operations": "Operations",
+  "confirmDelete": "Confirm Delete?",
+  "status": "Status"
+}

@@ -1,0 +1,78 @@
+{
+  "name": "ys-web-boilerplate",
+  "description": "YS Web Application Boilerplate",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^6.0.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
+    "antd": "^4.11.1",
+    "axios": "^0.21.1",
+    "craco-less": "^1.17.1",
+    "dayjs": "^1.10.4",
+    "echarts": "^5.0.1",
+    "i18next": "^19.8.9",
+    "i18next-browser-languagedetector": "^6.0.1",
+    "i18next-http-backend": "^1.1.1",
+    "lodash": "^4.17.20",
+    "loglevel": "^1.7.1",
+    "node-xlsx": "^0.16.1",
+    "qrcode.react": "^1.0.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-i18next": "^11.8.7",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.1",
+    "sockjs-client": "^1.5.0",
+    "styled-components": "^5.2.1",
+    "swr": "^0.4.2",
+    "typescript": "^4.0.3",
+    "web-vitals": "^0.2.4"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@types/echarts": "^4.9.3",
+    "@types/lodash": "^4.14.168",
+    "@types/node-xlsx": "^0.15.1",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/sockjs-client": "^1.5.0",
+    "@types/styled-components": "^5.1.7",
+    "antd-dayjs-webpack-plugin": "^1.0.6",
+    "husky": "^4.3.8"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}

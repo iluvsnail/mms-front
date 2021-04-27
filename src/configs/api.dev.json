@@ -1,0 +1,20 @@
+{
+  "api": {
+    "protocol": "http",
+    "ip": "qyj.chenyl.cf",
+    "port": "9998",
+    "prefix": ""
+  },
+  "other": {
+    "protocol": "http",
+    "ip": "127.0.0.1",
+    "port": "9998",
+    "prefix": ""
+  },
+  "qyj": {
+    "protocol": "http",
+    "ip": "127.0.0.1",
+    "port": "9998",
+    "prefix": ""
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "page1": "Table Page",
+  "page2": "Basic Form",
+  "page3": "Step Form",
+  "page4": "Complex Form",
+  "system": "System Management",
+  "system/user": "User Management",
+  "system/data": "Data Management",
+  "system/config": "Config Management"
+}

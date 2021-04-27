@@ -1,0 +1,19 @@
+{
+  "table": {
+    "title": "用户列表"
+  },
+  "userName": "用户名",
+  "isLock": "当前状态",
+  "isLock0": "未冻结",
+  "isLock1": "冻结",
+  "createDate": "创建日期",
+  "updateDate": "修改日期",
+  "selectIsLock": "选择状态",
+  "role": "身份",
+  "meterage": "计量员",
+  "admin": "管理员",
+  "name": "姓名",
+  "special": "专业",
+  "position": "职位",
+  "department": "部门"
+}

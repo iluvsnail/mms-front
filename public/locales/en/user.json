@@ -1,0 +1,12 @@
+{
+  "table": {
+    "title": "Data List"
+  },
+  "name": "Name",
+  "sex": "Sex",
+  "sex0": "Female",
+  "sex1": "Male",
+  "createDate": "Create Date",
+  "updateDate": "Update Date",
+  "selectSex": "Select Sex"
+}

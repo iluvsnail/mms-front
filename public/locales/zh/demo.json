@@ -1,0 +1,12 @@
+{
+  "table": {
+    "title": "数据列表"
+  },
+  "name": "名称",
+  "sex": "性别",
+  "sex0": "女",
+  "sex1": "男",
+  "createDate": "创建时间",
+  "updateDate": "更新时间",
+  "selectSex": "选择 性别"
+}
