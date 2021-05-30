@@ -17,7 +17,7 @@
 ### i18n
 
 - [react-i18next 官方文档](https://react.i18next.com/)
-- 字符串需提取到 `/public/locales/{languageName}/{moduleName}.json` 文件中，并通过 `react-i18next` 库相关方法引入，可参考 `src/components/User` 组件写法，详情参照 `react-i18next` 文档中的 `useTranslation` 以及 `namespace` 相关用法。
+- 字符串需提取到 `/public/locales/{languageName}/{moduleName}.json` 文件中，并通过 `react-i18next` 库相关方法引入，可参考 `src/components/Institution` 组件写法，详情参照 `react-i18next` 文档中的 `useTranslation` 以及 `namespace` 相关用法。
 
 ## Project Catalog
 

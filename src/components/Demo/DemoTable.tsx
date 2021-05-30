@@ -3,7 +3,7 @@ import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { IDemo } from "../../models/demo";
 import YSTable from "../YSTable";
-import { DateFormatString } from "../../constants/strings";
+import { DateTimeFormatString } from "../../constants/strings";
 import { Button, Popconfirm } from "antd";
 import { Sex } from "../../models/dict";
 
@@ -42,13 +42,13 @@ const DemoTable: FC<Props> = ({
       {
         note: t("createDate"),
         dataIndex: "createDate",
-        render: (v: number) => dayjs(v).format(DateFormatString),
+        render: (v: number) => dayjs(v).format(DateTimeFormatString),
         sorter: (a: IDemo, b: IDemo) => a.createDate - b.createDate,
       },
       {
         note: t("updateDate"),
         dataIndex: "updateDate",
-        render: (v: number) => dayjs(v).format(DateFormatString),
+        render: (v: number) => dayjs(v).format(DateTimeFormatString),
         sorter: (a: IDemo, b: IDemo) => a.updateDate - b.updateDate,
       },
       {

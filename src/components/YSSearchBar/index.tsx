@@ -89,6 +89,23 @@ const YSSearchBar: FC<Props> = ({
       <Row style={{ borderBottom: "1px solid #f0f0f0" }}>
         {formItems}
         <Col flex={1} style={{ marginBottom: "24px", textAlign: "right" }}>
+          {items.length < 4 ? null : (
+              <Button
+                  type="link"
+                  onClick={() => setShowMore((prev) => !prev)}
+                  title={showMore ? "收起" : "展开"}
+              >
+                {showMore ? (
+                    <>
+                      收起 <UpOutlined />
+                    </>
+                ) : (
+                    <>
+                      展开 <DownOutlined />
+                    </>
+                )}
+              </Button>
+          )}
           <Button
             type="primary"
             style={{ marginRight: "1rem" }}
@@ -100,23 +117,7 @@ const YSSearchBar: FC<Props> = ({
           <Button onClick={onClickReset} title={t("reset")}>
             {t("reset")}
           </Button>
-          {items.length < 4 ? null : (
-            <Button
-              type="link"
-              onClick={() => setShowMore((prev) => !prev)}
-              title={showMore ? "收起" : "展开"}
-            >
-              {showMore ? (
-                <>
-                  收起 <UpOutlined />
-                </>
-              ) : (
-                <>
-                  展开 <DownOutlined />
-                </>
-              )}
-            </Button>
-          )}
+
         </Col>
       </Row>
     </Form>

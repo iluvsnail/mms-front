@@ -1,6 +1,6 @@
 /** 上方标题栏 */
 import Avatar from "antd/lib/avatar/avatar";
-import { FC, useCallback, useContext } from "react";
+import React, {FC, useCallback, useContext, useState} from "react";
 import styled from "styled-components";
 import icon from "../../assets/icon.png";
 import {
@@ -8,31 +8,75 @@ import {
   DownOutlined,
   TranslationOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Menu, message } from "antd";
+import {Button, Dropdown, Form, Input, Menu, message, Modal, Radio, Select} from "antd";
 import { useTranslation } from "react-i18next";
 import { i18nKey, i18nList } from "../../i18n";
 import LanguageContext from "../../i18n/LanguageContext";
+import {clearToken} from "../../utils/tokenUtils";
+import {useHistory} from "react-router-dom";
+import {DatePicker} from "../YSDatePicker";
+import dayjs from "dayjs";
+import {DateTimeFormatString} from "../../constants/strings";
+import log from "loglevel";
+import {IDevice} from "../../models/device";
+import {asyncPutDevice} from "../../pages/Device/device.services";
+import {asyncChangePassword} from "../../pages/System/User/user.services";
 
 const Header: FC = () => {
   const { t, i18n } = useTranslation("common");
   const { setLanguage } = useContext(LanguageContext);
 
-  const onChangeLanguage = useCallback(
+  const history = useHistory();
+    const [form] = Form.useForm();
+    const [visible, setVisible] = useState(false);
+    const onChangeLanguage = useCallback(
     (newLanguage: i18nKey) => {
       i18n.changeLanguage(newLanguage);
       setLanguage(newLanguage);
     },
     [i18n, setLanguage]
   );
+    const onChangePassword = useCallback(() => {
+            setVisible(true);
+        },
+        []
+    );
 
   const onLogout = useCallback(() => {
-    message.info(t("logout"));
+      clearToken();
+      history.push("/login")
   }, [t]);
+    const onClose = useCallback(() => {
+        setVisible(false);
+    }, []);
+    const onSave = useCallback(
+        (data: any) => {
+            asyncChangePassword(data, (res) => {
+                if (res.isOk) {
+                    message.success("密码修改成功");
+                    onClose();
+                }
+            });
+        },
+        [onClose]
+    );
+    const onOk = useCallback(() => {
+        form
+            .validateFields()
+            .then((values) => {
 
+                onSave({
+                    ...values,
+                });
+            })
+            .catch((e) => {
+                log.error(e);
+            });
+    }, [form]);
   const userOverlay = (
     <Menu>
       <Menu.Item>
-        <Button type="text" size="small">
+        <Button type="text" size="small" onClick={onChangePassword}>
           {t("changePassword")}
         </Button>
       </Menu.Item>
@@ -79,6 +123,28 @@ const Header: FC = () => {
           <TranslationOutlined />
         </StyledHeaderI18n>
       </Dropdown>
+        <Modal
+            visible={visible}
+            afterClose={onClose}
+            onOk={onOk}
+            onCancel={onClose}
+            maskClosable={false}
+            forceRender
+            title="修改密码"
+        >
+            <Form
+                form={form}
+                labelCol={{ span: 6 }}
+                wrapperCol={{ offset: 1, span: 16 }}
+            >
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true ,message:"请输入密码！"}]}
+                >
+                    <Input type="password" placeholder={"请输入密码"}/>
+                </Form.Item>
+            </Form>
+        </Modal>
     </StyledHeader>
   );
 };

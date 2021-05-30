@@ -1,0 +1,31 @@
+{
+  "table": {
+    "title": "检定任务列表"
+  },
+  "createUser":"创建者",
+  "detectedDeviceCount":"已检定设备数量",
+  "dutyPerson":"责任人",
+  "finishDate":"结束日期",
+  "instrumentCount":"仪器数量",
+  "name":"任务名称",
+  "receivedDeviceCount":"已接收设备数量",
+  "sentDeviceCount":"已发送设备数量",
+  "startDate":"开始日期",
+  "status":"状态",
+  "currentStatus":"当前状态",
+  "startFinishDate": "起止日期",
+  "progress": "任务流程",
+  "finish": "完成",
+  "enterTask": "进入任务",
+  "selectStatus": "选择状态",
+  "status0": "待开始",
+  "status1": "进行中",
+  "status2": "已完成",
+  "instrument": "检定仪器",
+  "device": "检定设备",
+  "received": "设备接收",
+  "detected": "设备检定",
+  "sent": "设备发放",
+  "save": "保存",
+  "result": "检定结果"
+}

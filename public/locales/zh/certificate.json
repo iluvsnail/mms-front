@@ -1,0 +1,23 @@
+{
+  "table": {
+    "title": "检定证书列表"
+  },
+  "deviceName": "设备名称",
+  "standardType": "规格型号",
+  "factoryNumber": "出厂编号",
+  "certificateNumber": "证书和报告编号",
+  "entrustUnit": "委托单位",
+  "verifier": "检定员",
+  "createDate": "创建日期",
+  "updateDate": "修改日期",
+  "validDate": "有效日期",
+  "notes": "备注",
+  "verifyResult": "检测结果",
+  "verifyResult0": "合格",
+  "verifyResult1": "不合格",
+  "selectVerifyResult": "选择检测结果",
+  "print": "打印",
+  "export": "导出",
+  "verifyDate": "检测日期",
+  "submitDate": "送检日期"
+}

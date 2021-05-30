@@ -7,16 +7,14 @@ import { setPreLocation } from "./preLocationUtils";
 import { clearToken, getToken } from "./tokenUtils";
 import history from "./history";
 import { AsyncCallback } from "../models/common";
-import log from "loglevel";
 
-const YSAxios = axios.create({ baseURL: BASE_URL });
-
+const YSAxios = axios.create({ baseURL: BASE_URL ,withCredentials:true});
 // Response成功的拦截器，用于处理返回数据
 const onFullFilled = (response: AxiosResponse): AxiosResponse => response;
 
 // Response失败的拦截器，用于错误处理
 const onRejected = (err: any): Promise<void> => {
-  log.error("NETWORK REJECTED: ", `${err}`);
+  console.error("NETWORK REJECTED: ", `${err}`);
   if (err.response && err.response.data && err.response.data.code) {
     const { code, message } = err.response.data;
     err.message = `错误 ${code}: ${message || "Unknown"}`;
@@ -38,8 +36,12 @@ const onRejected = (err: any): Promise<void> => {
 const requestOnFullFilled = (
   request: AxiosRequestConfig
 ): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
-  //const token = getToken();
-  const token = "authroized"
+  const token = getToken();
+  if(request.url=="login"){
+    return Object.assign(request, {
+      headers: { ...request.headers, Authorization: "666" },
+    });
+  }
   if (token) {
     return Object.assign(request, {
       headers: { ...request.headers, Authorization: token },

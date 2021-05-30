@@ -1,19 +1,22 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import YSSearchBar from "../../components/YSSearchBar";
+import YSSearchBar from "../../../components/YSSearchBar";
 import { Select } from "antd";
-import {LockList} from "../../models/dict";
+import {LockList} from "../../../models/dict";
+import {IRole} from "../../../models/role";
 
 interface Props {
     onSearch: (params?: Record<string, unknown>) => void;
+    roles:IRole[]
 }
 
-const UserSearch: FC<Props> = ({ onSearch }) => {
+const UserSearch: FC<Props> = ({ onSearch ,roles}) => {
     const { t } = useTranslation(["user", "dict"]);
+
     return (
         <YSSearchBar
             items={[
-                { name: "name", label: t("name") },
+                { name: "userName", label: t("userName") },
                 {
                     name: "isLock",
                     label: t("isLock"),
@@ -27,7 +30,18 @@ const UserSearch: FC<Props> = ({ onSearch }) => {
                         </Select>
                     ),
                 },
-                { name: "role", label: t("role") },
+                {
+                    name: "role",
+                    label: t("role"),
+                    render: (
+                        <Select allowClear placeholder={t("selectRole")}>
+                            {
+                                roles.map((it) =>(
+                                    (<Select key={it.id} value={it.id}>{it.note}</Select>)
+                                ))}
+                        </Select>
+                    ),
+                },
             ]}
             onSearch={onSearch}
         />

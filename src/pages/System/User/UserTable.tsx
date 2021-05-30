@@ -1,27 +1,32 @@
 import dayjs from "dayjs";
-import { FC, useMemo } from "react";
+import {FC, useMemo, useState} from "react";
 import { useTranslation } from "react-i18next";
-import YSTable from "../../components/YSTable";
-import { DateFormatString } from "../../constants/strings";
+import YSTable from "../../../components/YSTable";
+import { DateTimeFormatString } from "../../../constants/strings";
 import { Button, Popconfirm } from "antd";
-import {IsLock, LockList} from "../../models/dict";
-import {IUser} from "../../models/user";
-import {IRole} from "../../models/role";
+import {IsLock, LockList} from "../../../models/dict";
+import {IUser} from "../../../models/user";
+import {IRole} from "../../../models/role";
 
 interface Props {
   data: IUser[];
+  its:string[];
   loading: boolean;
   onAdd: () => void;
-  onBatchDel:()=>void;
-  onBatchLock:()=>void;
-  onBatchResetPassword:()=>void;
+  onBatchDel:(its:string[])=>void;
+  onBatchLock:(its:string[])=>void;
+  onBatchResetPassword:(its:string[])=>void;
   onEdit: (item: IUser) => void;
   onDel: (item: IUser) => void;
+  onResetPassword: (item: IUser) => void;
+  onLock: (item: IUser) => void;
   onRefresh: () => void;
+  setSelectedRows:(its:string[])=>void;
 }
 
 const UserTable: FC<Props> = ({
   data,
+    its,
   loading,
   onAdd,
   onBatchDel,
@@ -29,46 +34,51 @@ const UserTable: FC<Props> = ({
   onBatchResetPassword,
   onEdit,
   onDel,
+    onResetPassword,
+    onLock,
   onRefresh,
+    setSelectedRows,
 }) => {
   const { t } = useTranslation(["user", "common", "dict"]);
-
+    const onSelectChange = function (selectedRowKeys:any){
+        setSelectedRows(selectedRowKeys)
+    };
   const columns = useMemo(
     () => [
       {
-        note: t("userName"),
+        title: t("userName"),
         dataIndex: "userName",
         sorter: (a: IUser, b: IUser) => a.userName.localeCompare(b.userName),
       },
       {
-        note: t("isLock"),
+        title: t("isLock"),
         dataIndex: "isLock",
         render: (v: IsLock) => t(`dict:isLock.${v}`),
         sorter: (a: IUser, b: IUser) => a.isLock - b.isLock,
       },
         {
-            note: t("role"),
+            title: t("role"),
             dataIndex: "role",
             sorter: (a: IUser, b: IUser) => a.role.name.localeCompare(b.role.name),
             render: (v:IRole) => t(`user:${v.name}`)
         },
         {
-            note: t("name"),
+            title: t("name"),
             dataIndex: "name",
             sorter: (a: IUser, b: IUser) => a.name.localeCompare(b.name),
         },
         {
-            note: t("special"),
+            title: t("special"),
             dataIndex: "special",
             sorter: (a: IUser, b: IUser) => a.special.localeCompare(b.special),
         },
         {
-            note: t("department"),
+            title: t("department"),
             dataIndex: "department",
             sorter: (a: IUser, b: IUser) => a.special.localeCompare(b.department),
         },
         {
-            note: t("position"),
+            title: t("position"),
             dataIndex: "position",
             sorter: (a: IUser, b: IUser) => a.special.localeCompare(b.special),
         },
@@ -86,7 +96,7 @@ const UserTable: FC<Props> = ({
         sorter: (a: IUser, b: IUser) => a.updateDate - b.updateDate,
       },*/
       {
-        note: t("common:operations"),
+        title: t("common:operations"),
         dataIndex: "OPERATIONS",
         render: (v: unknown, r: IUser) => (
           <>
@@ -97,23 +107,30 @@ const UserTable: FC<Props> = ({
               type="link"
             >
               {t("common:edit")}
-            </Button>
+            </Button><Popconfirm
+              onConfirm={() => onLock(r)}
+              title={t("common:confirmLock")}
+          >
               <Button
                   size="small"
-                  onClick={() => onEdit(r)}
                   title={t("common:lock")}
                   type="link"
               >
                   {t("common:lock")}
               </Button>
+          </Popconfirm>
+              <Popconfirm
+                  onConfirm={() => onResetPassword(r)}
+                  title={t("common:confirmResetPassword")}
+              >
               <Button
                   size="small"
-                  onClick={() => onEdit(r)}
                   title={t("common:resetPassword")}
                   type="link"
               >
                   {t("common:resetPassword")}
               </Button>
+              </Popconfirm>
             <Popconfirm
               onConfirm={() => onDel(r)}
               title={t("common:confirmDelete")}
@@ -136,6 +153,7 @@ const UserTable: FC<Props> = ({
       loading={loading}
       rowSelection={{
           type: "checkbox",
+          onChange:onSelectChange
       }}
       columns={columns}
       tableTitle={t("table.title")}
@@ -144,6 +162,7 @@ const UserTable: FC<Props> = ({
       onBatchLock={onBatchLock}
       onBatchResetPassword={onBatchResetPassword}
       onRefresh={onRefresh}
+      its={its}
     />
   );
 };

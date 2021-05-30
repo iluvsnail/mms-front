@@ -1,15 +1,19 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { StyledContainer } from "../../components/StyledComponents";
+import { StyledContainer } from "../../../components/StyledComponents";
 import UserSearch from "./UserSearch";
 import UserTable from "./UserTable";
-import { IUser } from "../../models/user";
-import {IRole} from "../../models/role";
+import { IUser } from "../../../models/user";
+import {IRole} from "../../../models/role";
 import {
   asyncDelUser,
   asyncGetUserData,
-  asyncPostDemo,
-  asyncPutDemo,
-    asyncGetRoleData
+  asyncPutUser,
+  asyncGetRoleData,
+  asyncDelUsers,
+  asyncLockUser,
+  asyncResetPassword,
+  asyncLockUsers,
+  asyncResetUsersPassword
 } from "./user.services";
 import UserForm from "./UserForm";
 import { message } from "antd";
@@ -21,7 +25,10 @@ const User: FC = () => {
   const [item, setItem] = useState<IUser>();
   const [formVisible, setFormVisible] = useState(false);
   const [params, setParams] = useState<Record<string, unknown>>();
-
+  let [selectedRows,setSelected]=useState<string[]>([])
+  useEffect(()=>{
+    setSelected(selectedRows)
+  },[selectedRows])
   const loadData = useCallback(() => {
     setLoading(true);
     asyncGetUserData((res) => {
@@ -45,14 +52,29 @@ const User: FC = () => {
   const onAdd = useCallback(() => {
     setFormVisible(true);
   }, []);
-  const onBatchDel = useCallback(() => {
-    setFormVisible(true);
+  const onBatchDel =useCallback((its:string[]) => {
+    asyncDelUsers(its, (res) => {
+      if (res.isOk) {
+        message.success("删除成功");
+        onRefresh()
+      }
+    });
+  },[]);
+  const onBatchLock = useCallback((its:string[]) => {
+    asyncLockUsers(its, (res) => {
+      if (res.isOk) {
+        message.success("锁定用户成功");
+        onRefresh()
+      }
+    });
   }, []);
-  const onBatchLock = useCallback(() => {
-    setFormVisible(true);
-  }, []);
-  const onBatchResetPassword = useCallback(() => {
-    setFormVisible(true);
+  const onBatchResetPassword = useCallback((its:string[]) => {
+    asyncResetUsersPassword(its, (res) => {
+      if (res.isOk) {
+        message.success("重置密码成功");
+        onRefresh()
+      }
+    });
   }, []);
   const onEdit = useCallback((editItem: IUser) => {
     setItem(editItem);
@@ -72,42 +94,68 @@ const User: FC = () => {
       }
     });
   }, []);
-
+  const onResetPassword = useCallback((data: IUser) => {
+    asyncResetPassword(data, (res) => {
+      if (res.isOk) {
+        message.success("重置密码成功");
+        setList((prev) =>
+            prev.map((p) => {
+              if (p.userName === data.userName) {
+                return res.data;
+              }
+              return p;
+            })
+        );
+      }
+    });
+  }, []);
+  const onLock = useCallback((data: IUser) => {
+    asyncLockUser(data, (res) => {
+      if (res.isOk) {
+        message.success("冻结用户成功");
+        setList((prev) =>
+            prev.map((p) => {
+              if (p.userName === data.userName) {
+                return res.data;
+              }
+              return p;
+            })
+        );
+      }
+    });
+  }, []);
   const onSave = useCallback(
     (data: IUser) => {
       setLoading(true);
-      if (data.userName) {
-        asyncPutDemo(data, (res) => {
+        asyncPutUser(data, (res) => {
           setLoading(false);
           if (res.isOk) {
-            message.success("编辑成功");
+            let flg = false;
             setList((prev) =>
               prev.map((p) => {
                 if (p.userName === data.userName) {
+                  flg=true;
                   return res.data;
                 }
                 return p;
               })
             );
+            if(flg){
+              message.success("编辑成功");
+            }else{
+              message.success("新增成功");
+            }
+            if(!flg){
+              setList((prev) => [res.data, ...prev]);
+            }
             onClose();
           }
         });
-      } else {
-        asyncPostDemo(data, (res) => {
-          setLoading(false);
-          if (res.isOk) {
-            message.success("新增成功");
-            setList((prev) => [res.data, ...prev]);
-            onClose();
-          }
-        });
-      }
     },
     [onClose]
   );
 
   const onSearch = useCallback((newParams?: Record<string, unknown>) => {
-    console.log(newParams)
     setParams(newParams);
   }, []);
 
@@ -118,18 +166,26 @@ const User: FC = () => {
       return list;
     }
     let result = [...list];
-    if (params.name) {
-      result = result.filter(r => r.name.includes(params.name as string));
+    if (params.userName) {
+      result = result.filter(r => r.userName.includes(params.userName as string));
     }
     if (params.isLock !== undefined) {
-      result = result.filter(r => r.isLock === params.isLock);
+      result = result.filter(r => r.isLock == params.isLock);
+    }
+    if (params.role !== undefined) {
+      result = result.filter(r => r.role.id == params.role);
     }
     return result;
   }, [params, list]);
 
+  const setSelectedRows=(its:string[])=>{
+    setSelected(its)
+  }
   return (
     <StyledContainer>
-      <UserSearch onSearch={onSearch} />
+      <UserSearch
+          onSearch={onSearch}
+          roles = {roles}/>
       <UserTable
         data={filteredList}
         loading={loading}
@@ -139,7 +195,11 @@ const User: FC = () => {
         onBatchResetPassword={onBatchResetPassword}
         onEdit={onEdit}
         onDel={onDel}
+        onResetPassword={onResetPassword}
+        onLock={onLock}
         onRefresh={onRefresh}
+        setSelectedRows={setSelectedRows}
+        its={selectedRows}
       />
       <UserForm
         visible={formVisible}

@@ -42,7 +42,7 @@ const Menu: FC<RouteComponentProps> = ({ location }) => {
         </AntdMenu.Item>
       }else{
         let children =
-            c.children.map((gc) => {
+            c.children.filter(v=>!v.isHidden).map((gc) => {
               return (<AntdMenu.Item style={{ fontSize: "1rem" }} key={gc.path}>
                 <Link to={`/${gc.path}`}>{t(gc.path)}</Link>
               </AntdMenu.Item>)
