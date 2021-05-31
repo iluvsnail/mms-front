@@ -8,6 +8,7 @@ import {IsLock, LockList} from "../../models/dict";
 import {IRole} from "../../models/role";
 import {IDevice} from "../../models/device";
 import {ICodecriterion} from "../../models/codecriterion";
+import {isAdmin} from "../../utils/tokenUtils";
 
 interface Props {
   data: IDevice[];
@@ -81,14 +82,15 @@ const DeviceTable: FC<Props> = ({
         dataIndex: "OPERATIONS",
         render: (v: unknown, r: IDevice) => (
           <>
-            <Button
-              size="small"
-              onClick={() => onEdit(r)}
-              title={t("common:edit")}
-              type="link"
-            >
-              {t("common:edit")}
-            </Button>
+              {isAdmin()?(<Button
+                  size="small"
+                  onClick={() => onEdit(r)}
+                  title={t("common:edit")}
+                  type="link"
+              >
+                  {t("common:edit")}
+              </Button>):""}
+
               <Button
                   size="small"
                   onClick={() => onDetail(r)}
@@ -97,23 +99,26 @@ const DeviceTable: FC<Props> = ({
               >
                   {t("common:detail")}
               </Button>
-
-              <Button
+              {
+                  isAdmin()?(<Button
                   size="small"
                   onClick={() => onRecord(r)}
                   title={t("device:record")}
                   type="link"
               >
                   {t("device:record")}
-              </Button>
-            <Popconfirm
-              onConfirm={() => onDel(r)}
-              title={t("common:confirmDelete")}
-            >
-              <Button size="small" title={t("common:delete")} type="link">
-                {t("common:delete")}
-              </Button>
-            </Popconfirm>
+              </Button>):""}
+              {
+                  isAdmin()?(
+                      <>
+                      <Popconfirm
+                      onConfirm={() => onDel(r)}
+                      title={t("common:confirmDelete")}
+                  >
+                      <Button size="small" title={t("common:delete")} type="link">
+                          {t("common:delete")}
+                      </Button>
+                  </Popconfirm>
 
               <Button
                   size="small"
@@ -122,7 +127,8 @@ const DeviceTable: FC<Props> = ({
                   type="link"
               >
                   {t("device:printLabel")}
-              </Button>
+              </Button></>
+                  ):""}
           </>
         ),
       },
@@ -148,6 +154,7 @@ const DeviceTable: FC<Props> = ({
       onBatchExport={onBatchExport}
       onRefresh={onRefresh}
       its={its}
+      isAdmin={isAdmin()}
     />
   );
 };

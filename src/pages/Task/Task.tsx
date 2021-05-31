@@ -10,10 +10,7 @@ import {
   asyncPutTask,
   asyncGetCodeData,
   asyncDelTasks,
-  asyncLockUser,
-  asyncResetPassword,
-  asyncLockUsers,
-  asyncResetUsersPassword, asyncFinishTask, asyncFinishTasks, asyncExportTasks
+  asyncLockUsers, asyncFinishTask, asyncFinishTasks, asyncExportTasks
 } from "./task.services";
 import TaskForm from "./TaskForm";
 import { message } from "antd";

@@ -9,6 +9,7 @@ import {IRole} from "../../models/role";
 import {ICodecriterion} from "../../models/codecriterion";
 import {ICriterion} from "../../models/criterion";
 import {IDevice} from "../../models/device";
+import {isAdmin} from "../../utils/tokenUtils";
 
 interface Props {
   data: ICriterion[];
@@ -83,14 +84,16 @@ onUpdateTracing
         dataIndex: "OPERATIONS",
         render: (v: unknown, r: ICriterion) => (
           <>
-            <Button
-              size="small"
-              onClick={() => onEdit(r)}
-              title={t("common:edit")}
-              type="link"
-            >
-              {t("common:edit")}
-            </Button>
+              {
+                  isAdmin()?(<Button
+                      size="small"
+                      onClick={() => onEdit(r)}
+                      title={t("common:edit")}
+                      type="link"
+                  >
+                      {t("common:edit")}
+                  </Button>):""
+              }
               <Button
                   size="small"
                   onClick={() => onDetail(r)}
@@ -108,6 +111,7 @@ onUpdateTracing
               >
                   {t("criterion:tracing")}
               </Button>
+              {isAdmin()?(
             <Popconfirm
               onConfirm={() => onDel(r)}
               title={t("common:confirmDelete")}
@@ -115,7 +119,7 @@ onUpdateTracing
               <Button size="small" title={t("common:delete")} type="link">
                 {t("common:delete")}
               </Button>
-            </Popconfirm>
+            </Popconfirm>):""}
           </>
         ),
       },

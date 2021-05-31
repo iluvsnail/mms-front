@@ -18,6 +18,10 @@ const getToken = (): string | undefined => {
   return ls.getItem('token');
 }
 
+const isAdmin =()=>{
+  return getToken()?.startsWith("admin");
+}
+
 const getTokenFlag = (token: string) => {
   const payload = jwtDecode(token);
   return payload.flag;
@@ -45,4 +49,4 @@ function clearToken() {
   ls.removeItem('_s_token');
 }
 
-export { getToken, setToken, clearToken };
+export { getToken, setToken, clearToken,isAdmin };

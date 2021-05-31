@@ -33,6 +33,7 @@ import BatchSendForm from "./BatchSendForm";
 import BatchUploadForm from "./BatchUploadForm";
 import {ICertificate} from "../../../models/certificate";
 import PrintForm from "./PrintForm";
+import {isAdmin} from "../../../utils/tokenUtils";
 
 const TaskRun: FC = () => {
   const [criterionList, setCriterionList] = useState<ICriterion[]>([]);
@@ -714,7 +715,9 @@ const TaskRun: FC = () => {
             </TabPane>
           </Tabs>
           <Divider></Divider>
-          <Row>
+          {
+          isAdmin()?(
+          <Row >
             <Col span={2} offset={9}><Button type="primary" onClick={() => {
               if(item)onFinish(item)
             }} title={t("finish")}>
@@ -725,7 +728,7 @@ const TaskRun: FC = () => {
             }} title={t("save")}>
               {t("save")}
             </Button></Col>
-          </Row>
+          </Row>):""}
           <ReceiveForm  item={receivedItem} visible={formVisible} onSave={onSaveReceive} onCancel={onReceiveClose}></ReceiveForm>
           <SendForm  item={sendItem} visible={sendFormVisible} onSave={onSaveSend} onCancel={onSendClose}></SendForm>
           <SendForm  item={editItem} visible={sendEditVisible} onSave={onSaveSendEdit} onCancel={onSendEditClose}></SendForm>

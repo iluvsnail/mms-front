@@ -8,6 +8,7 @@ import {IsLock, LockList} from "../../models/dict";
 import {IRole} from "../../models/role";
 import {ITask} from "../../models/task";
 import {ICodecriterion} from "../../models/codecriterion";
+import {isAdmin} from "../../utils/tokenUtils";
 
 interface Props {
   data: ITask[];
@@ -108,7 +109,7 @@ const TaskTable: FC<Props> = ({
               >
                   {t("common:detail")}
               </Button>*/}
-
+              {isAdmin()?(<>
             <Popconfirm
               onConfirm={() => onDel(r)}
               title={t("common:confirmDelete")}
@@ -126,6 +127,7 @@ const TaskTable: FC<Props> = ({
               >
                   {t("task:finish")}
               </Button>
+                      </>):""}
           </>
         ),
       },

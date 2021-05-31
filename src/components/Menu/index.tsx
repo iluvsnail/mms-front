@@ -5,6 +5,7 @@ import styled from "styled-components";
 import routeConfigs from "../../configs/routeConfigs";
 import { Menu as AntdMenu } from "antd";
 import { useTranslation } from "react-i18next";
+import {getToken, isAdmin} from "../../utils/tokenUtils";
 
 const StyledMenu = styled.div`
   width: 15rem;
@@ -15,7 +16,6 @@ const StyledMenu = styled.div`
 
 const Menu: FC<RouteComponentProps> = ({ location }) => {
   const { t } = useTranslation("menu");
-
   const activity = useMemo(() => {
       let act = routeConfigs.find((r) => {
           if(!r.children){
@@ -33,7 +33,13 @@ const Menu: FC<RouteComponentProps> = ({ location }) => {
   }, [location]);
 
   const menus = useMemo(() => {
-    return routeConfigs.map((c) => {
+    return routeConfigs.filter(rc=>{
+        if( rc.path == 'system' || rc.path == 'certificate' || rc.path=='baseData') {
+            if(isAdmin()) return true; else return false;
+        }else {
+            return true;
+        }
+    }).map((c) => {
       let menu ;
       if(!c.children){
       menu=
@@ -42,7 +48,7 @@ const Menu: FC<RouteComponentProps> = ({ location }) => {
         </AntdMenu.Item>
       }else{
         let children =
-            c.children.filter(v=>!v.isHidden).map((gc) => {
+            c.children?.filter(v=>!v.isHidden).map((gc) => {
               return (<AntdMenu.Item style={{ fontSize: "1rem" }} key={gc.path}>
                 <Link to={`/${gc.path}`}>{t(gc.path)}</Link>
               </AntdMenu.Item>)

@@ -48,6 +48,7 @@ interface Props<RecordType = any> extends TableProps<RecordType> {
   showSizeChanger?: boolean;
   // TODO: 设置之后展示列项编辑功能
   showColumnsChanger?: boolean;
+  isAdmin?:boolean;
 }
 
 const tableSizeList = ["default", "middle", "small"];
@@ -79,6 +80,7 @@ const YSTable: FC<Props> = ({
                               onBatchSend,
   showSizeChanger = true,
   showColumnsChanger,
+    isAdmin,
   ...tableProps
 }) => {
   const { t, i18n } = useTranslation("common");
@@ -134,18 +136,18 @@ const codesRadio=codes?.map(v => {
           }
         </div>
         <div style={{ flex: 1, textAlign: "right" }}>
-          {onAdd ? (
+          {(onAdd && isAdmin) ? (
             <Button type="primary" onClick={onAdd} title={t("add")}>
               <PlusOutlined /> {t("add")}
             </Button>
           ) : null}
-          {onBatchPrint ? (
+          {(onBatchPrint && isAdmin)? (
               <Button onClick={()=>onBatchPrint(its?its:[])}
                       title={t("batchPrint")} style={{ marginLeft: "1rem", cursor: "pointer" }}>
                 {t("batchPrint")}
               </Button>
           ) : null}
-          {onBatchDel ? (
+          {(onBatchDel && isAdmin) ? (
 
               <Popconfirm
                   onConfirm={() => onBatchDel(its?its:[])}
@@ -157,7 +159,7 @@ const codesRadio=codes?.map(v => {
               </Button>
               </Popconfirm>
           ) : null}
-          {onUpdateTracing ? (
+          {(onUpdateTracing && isAdmin)? (
               <Button onClick={() =>onUpdateTracing(its?its:[])} title={t("onUpdateTracing")} style={{ marginLeft: "1rem", cursor: "pointer" }}>
                 {t("onUpdateTracing")}
               </Button>
@@ -184,17 +186,17 @@ const codesRadio=codes?.map(v => {
               </Button>
               </Popconfirm>
           ) : null}
-          {onBatchImport ? (
+          {(onBatchImport && isAdmin ) ? (
               <Button onClick={() =>onBatchImport(its?its:[])} title={t("batchImport")} style={{ marginLeft: "1rem", cursor: "pointer" }}>
                 {t("batchImport")}
               </Button>
           ) : null}
-          {onBatchExport ? (
+          {(onBatchExport && isAdmin) ? (
               <Button onClick={() =>onBatchExport(its?its:[])} title={t("batchExport")} style={{ marginLeft: "1rem", cursor: "pointer" }}>
                 {t("batchExport")}
               </Button>
           ) : null}
-          {onBatchFinish ? (
+          {(onBatchFinish && isAdmin) ? (
               <Button onClick={() =>onBatchFinish(its?its:[])} title={t("batchFinish")} style={{ marginLeft: "1rem", cursor: "pointer" }}>
                 {t("batchFinish")}
               </Button>

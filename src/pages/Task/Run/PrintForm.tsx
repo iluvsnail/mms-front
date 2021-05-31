@@ -1,11 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import {Col, Form, Image, Modal, Radio, Row, Select} from "antd";
+import {Col, Form, Image, message, Modal, Radio, Row, Select} from "antd";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import log from "loglevel";
 import {ITaskDevice} from "../../../models/taskdevice";
 import {BASE_URL} from "../../../utils/apiUtils";
 import api from "../../../configs/api";
+import {isAdmin} from "../../../utils/tokenUtils";
 
 interface Props {
   visible: boolean;
@@ -31,6 +32,10 @@ const PrintForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
   }, [form]);
 
   const onOk = useCallback(() => {
+    if(!isAdmin()){
+      message.info("您没有打印权限！")
+      return;
+    }
     onSave()
   }, [form, onSave]);
   return (

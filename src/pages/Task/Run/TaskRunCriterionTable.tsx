@@ -73,7 +73,7 @@ const TaskRunCriterionTable: FC<Props> = ({
       rowSelection={{
           type: "checkbox",
           onChange:onSelectChange,
-          selectedRowKeys:its
+          selectedRowKeys:its,
       }}
       columns={columns}
       its={its}
