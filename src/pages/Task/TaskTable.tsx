@@ -152,6 +152,7 @@ const TaskTable: FC<Props> = ({
       onBatchFinish={onBatchFinish}
       onRefresh={onRefresh}
       its={its}
+      isAdmin={isAdmin()}
     />
   );
 };

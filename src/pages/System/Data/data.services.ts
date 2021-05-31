@@ -15,3 +15,11 @@ export const asyncbackup =  () => {
   document.body.removeChild(link);
 };
 
+export const asyncData = async (fn:Function, cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.data}/async`).catch((e) => {
+    message.error(e.message);
+    fn(false)
+    return e;
+  });
+  callback(res, cb);
+};

@@ -145,6 +145,7 @@ onUpdateTracing
       onBatchExport={onBatchExport}
       onRefresh={onRefresh}
       its={its}
+      isAdmin={isAdmin()}
     />
   );
 };

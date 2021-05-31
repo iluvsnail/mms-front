@@ -7,6 +7,7 @@ import { Button, Popconfirm } from "antd";
 import {IsLock, LockList} from "../../../models/dict";
 import {IUser} from "../../../models/user";
 import {IRole} from "../../../models/role";
+import {isAdmin} from "../../../utils/tokenUtils";
 
 interface Props {
   data: IUser[];
@@ -163,6 +164,7 @@ const UserTable: FC<Props> = ({
       onBatchResetPassword={onBatchResetPassword}
       onRefresh={onRefresh}
       its={its}
+      isAdmin={isAdmin()}
     />
   );
 };

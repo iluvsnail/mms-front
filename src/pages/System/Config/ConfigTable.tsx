@@ -7,6 +7,7 @@ import { Button, Popconfirm } from "antd";
 import {IsLock, LockList} from "../../../models/dict";
 import {IConfig} from "../../../models/config";
 import {IRole} from "../../../models/role";
+import {isAdmin} from "../../../utils/tokenUtils";
 
 interface Props {
   data: IConfig[];
@@ -78,6 +79,7 @@ const ConfigTable: FC<Props> = ({
       tableTitle={t("table.title")}
       onRefresh={onRefresh}
       its={its}
+      isAdmin={isAdmin()}
     />
   );
 };

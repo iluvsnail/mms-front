@@ -2,12 +2,14 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { StyledContainer } from "../../../components/StyledComponents";
 import {Button, message, Row, Col, Upload} from "antd";
 import {useTranslation} from "react-i18next";
-import {asyncbackup} from "./data.services";
+import {asyncbackup, asyncData} from "./data.services";
 import {BASE_URL} from "../../../utils/apiUtils";
 import api from "../../../configs/api";
+import AsyncDataForm from "./AsyncDataForm";
 
 const Data: FC = () => {
   const { t } = useTranslation(["common", "dict"]);
+  const [visible, setVisible] = useState(false);
   const props = {
     name: 'file',
     action: `${BASE_URL}/${api.data}/restore/`,
@@ -27,9 +29,22 @@ const Data: FC = () => {
       }
     },
   };
+  const onAsyncData = useCallback(() => {
+    setVisible(true)
+    asyncData( setVisible,(res) => {
+      if (res.isOk) {
+        setVisible(false)
+        if(res.data=="success"){
+          message.info("数据同步完成！")
+        }else{
+          message.warn(res.data);
+        }
+      }
+    });
+  }, []);
   return (
-    <StyledContainer>
-      <Row>
+    <StyledContainer >
+      <Row >
         <Col span={2}><Button type="primary" onClick={()=>asyncbackup()} title={t("backup")}>
           {t("backup")}
         </Button></Col>
@@ -40,11 +55,11 @@ const Data: FC = () => {
             </Button>
           </Upload>
         </Col>
-        <Col span={2}><Button  onClick={()=>{message.error("未实现")}} title={t("async")}>
+        <Col span={2}><Button  onClick={onAsyncData} title={t("async")}>
           {t("async")}
         </Button></Col>
       </Row>
-
+      <AsyncDataForm visible={visible}/>
     </StyledContainer>
   );
 };

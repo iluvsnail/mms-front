@@ -9,6 +9,7 @@ import {IRole} from "../../models/role";
 import {ICertificate} from "../../models/certificate";
 import {ICodecriterion} from "../../models/codecriterion";
 import {IDevice} from "../../models/device";
+import {isAdmin} from "../../utils/tokenUtils";
 
 interface Props {
   data: ICertificate[];
@@ -131,6 +132,7 @@ const CertificateTable: FC<Props> = ({
       onBatchExport={onBatchExport}
       onRefresh={onRefresh}
       its={its}
+      isAdmin={isAdmin()}
     />
   );
 };
