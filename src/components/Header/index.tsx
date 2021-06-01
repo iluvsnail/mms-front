@@ -12,7 +12,7 @@ import {Button, Dropdown, Form, Input, Menu, message, Modal, Radio, Select} from
 import { useTranslation } from "react-i18next";
 import { i18nKey, i18nList } from "../../i18n";
 import LanguageContext from "../../i18n/LanguageContext";
-import {clearToken} from "../../utils/tokenUtils";
+import {clearToken, getItem} from "../../utils/tokenUtils";
 import {useHistory} from "react-router-dom";
 import {DatePicker} from "../YSDatePicker";
 import dayjs from "dayjs";
@@ -114,7 +114,7 @@ const Header: FC = () => {
             size="small"
             style={{ marginRight: ".5rem", backgroundColor: "#2196f3" }}
           />
-          {"管理员 "}
+          {getItem("user")?.name}
           <DownOutlined />
         </StyledHeaderUser>
       </Dropdown>

@@ -2,7 +2,7 @@
 import React, {FC, useCallback, useEffect} from "react";
 import {Form, Input, Row, Col, Button, message} from "antd";
 import dayjs from "dayjs";
-import {getToken, setToken} from "../../utils/tokenUtils";
+import {getToken, setItem, setToken} from "../../utils/tokenUtils";
 import {useHistory} from "react-router-dom";
 import {IUser} from "../../models/user";
 import {asyncDelUser, asyncLogin} from "../System/User/user.services";
@@ -32,6 +32,7 @@ useEffect(()=>{
         if(res.data){
           //设置权限
           setToken(res.data.role.name+".1.2");
+          setItem("user", res.data);
           history.push("/device/list")
         }else{
           message.info("用户名或密码错误！")

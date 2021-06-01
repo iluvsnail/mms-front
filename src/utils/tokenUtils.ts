@@ -22,6 +22,12 @@ const isAdmin =()=>{
   return getToken()?.startsWith("admin");
 }
 
+const setItem = (item:string,value:any)=>{
+  ls.setItem(item, value);
+}
+const getItem = (item:string)=>{
+  return ls.getItem(item);
+}
 const getTokenFlag = (token: string) => {
   const payload = jwtDecode(token);
   return payload.flag;
@@ -49,4 +55,4 @@ function clearToken() {
   ls.removeItem('_s_token');
 }
 
-export { getToken, setToken, clearToken,isAdmin };
+export { getToken, setToken, clearToken,isAdmin ,setItem,getItem};
