@@ -1,7 +1,7 @@
 {
   "receivedDate": "接收时间",
   "sendDetectedPerson": "送检人",
-  "detectedDate": "检定时间",
+  "detectedDate": "检定日期",
   "detectedPerson": "检定人",
   "receivedPerson": "接收人",
   "status": "当前状态",
@@ -19,7 +19,7 @@
   "report": "检定报告",
   "uploadReport": "上传检定报告",
   "showCriterion": "查看证书",
-  "validDate": "有效时间",
+  "validDate": "有效期",
   "result0": "合格",
   "result1": "不合格"
 }

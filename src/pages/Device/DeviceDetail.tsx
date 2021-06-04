@@ -104,6 +104,17 @@ const DeviceDetail: FC<Props> = ({ visible, item, onSave,onCancel}) => {
               name="lastAuthenticationDate"
           >
             {item?.lastAuthenticationDate}
+          </Form.Item><Form.Item
+            label={t("lastAuthenticationInstitution")}
+            name="lastAuthenticationInstitution"
+        >
+          {item?.lastAuthenticationInstitution}
+        </Form.Item>
+          <Form.Item
+              label={t("location")}
+              name="location"
+          >
+            {item?.location}
           </Form.Item>
           <Form.Item
               label={t("validDate")}

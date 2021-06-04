@@ -12,6 +12,7 @@ const Institution = lazy(()=>import("../pages/BasicData/Institution"))
 const Certificate = lazy(()=>import("../pages/Certificate"))
 const Task = lazy(()=>import("../pages/Task"))
 const TaskRun = lazy(()=>import("../pages/Task/Run"))
+const TaskRun2 = lazy(()=>import("../pages/Task/Run/TaskRun2"))
 const Data = lazy(()=>import("../pages/System/Data"))
 const Config = lazy(()=>import("../pages/System/Config"))
 
@@ -34,8 +35,10 @@ const routeConfigs: RouterConfigItem[] = [
     children:[{ path: "criterion/list", component: Criterion }]
   },
   { path: "task",
-    children:[{ path: "task/list", component: Task }
-    ,{ path: "task/run", isHidden:true,component:TaskRun}]
+    children:[
+        { path: "task/list", component: Task },
+        { path: "task/run2", component: TaskRun2 },
+        { path: "task/run", isHidden:true,component:TaskRun}]
   },
   { path: "certificate",
     children:[{ path: "certificate/list", component: Certificate }]

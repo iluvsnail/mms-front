@@ -12,6 +12,8 @@ import locale from 'antd/es/date-picker/locale/zh_CN';
 import {DateTimeFormatString} from "../../constants/strings";
 import RecordTable from "./RecordTable";
 import {ITaskDevice} from "../../models/taskdevice";
+import RecordPrintForm from "./RecordPrintForm";
+import {ICertificate} from "../../models/certificate";
 
 interface Props {
   visible: boolean;
@@ -24,6 +26,9 @@ interface Props {
 const RecordForm: FC<Props> = ({ visible, item, onSave, onCancel,datas }) => {
   const [form] = Form.useForm();
   const { t } = useTranslation(["device", "common"]);
+
+  const [printVisible, setPrintVisible] = useState(false);
+  const [printItem, setItem] = useState<ITaskDevice>();
 
   useEffect(() => {
     if (visible && item && form) {
@@ -39,7 +44,20 @@ const RecordForm: FC<Props> = ({ visible, item, onSave, onCancel,datas }) => {
   const onOk = useCallback(() => {
     onSave();
   }, [form, onSave]);
-
+  const onPrint = useCallback((editItem: ITaskDevice) => {
+    setItem(editItem);
+    setPrintVisible(true);
+  }, []);
+  const onPrintClose = useCallback(() => {
+    setItem(undefined);
+    setPrintVisible(false);
+  }, []);
+  const onPrintSave = useCallback(
+      () => {
+        onPrintClose();
+      },
+      [onPrintClose]
+  );
   return (
       <Modal
           visible={visible}
@@ -88,8 +106,8 @@ const RecordForm: FC<Props> = ({ visible, item, onSave, onCancel,datas }) => {
           </Row>
 
         </Form>
-        <RecordTable data={datas}/>
-
+        <RecordTable data={datas} onPrint={onPrint}/>
+        <RecordPrintForm item={printItem} onCancel={onPrintClose} onSave={onPrintSave} visible={printVisible}></RecordPrintForm>
       </Modal>
   );
 };

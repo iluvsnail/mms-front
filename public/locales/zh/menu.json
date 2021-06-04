@@ -17,5 +17,6 @@
   "certificate": "检定证书管理",
   "certificate/list": "检定证书列表",
   "task": "检定任务管理",
-  "task/list": "检定任务列表"
+  "task/list": "检定任务列表",
+  "task/run2": "检定实施管理"
 }

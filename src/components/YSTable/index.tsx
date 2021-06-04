@@ -9,7 +9,7 @@ import {
   TablePaginationConfig,
   TableProps,
   Tooltip,
-  Radio, Input, Checkbox
+  Radio, Input, Checkbox, message, Upload
 } from "antd";
 import React, { FC, useMemo, useState } from "react";
 import styled from "styled-components";
@@ -21,6 +21,8 @@ import {
 } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import {ICodecriterion} from "../../models/codecriterion";
+import {BASE_URL} from "../../utils/apiUtils";
+import api from "../../configs/api";
 
 interface Props<RecordType = any> extends TableProps<RecordType> {
   dataSource: RecordType[];
@@ -49,6 +51,7 @@ interface Props<RecordType = any> extends TableProps<RecordType> {
   // TODO: 设置之后展示列项编辑功能
   showColumnsChanger?: boolean;
   isAdmin?:boolean;
+  importUrl?:string;
 }
 
 const tableSizeList = ["default", "middle", "small"];
@@ -81,6 +84,7 @@ const YSTable: FC<Props> = ({
   showSizeChanger = true,
   showColumnsChanger,
     isAdmin,
+    importUrl,
   ...tableProps
 }) => {
   const { t, i18n } = useTranslation("common");
@@ -119,6 +123,28 @@ const YSTable: FC<Props> = ({
 const codesRadio=codes?.map(v => {
  return <Radio value={v.id}>{v.criterionName}</Radio>
 })
+  const props = {
+    name: 'file',
+    accept:".xlsx",
+    showUploadList:false,
+    headers: {
+      authorization: 'authorization-text',
+    },
+    withCredentials:true,
+    onChange(info:any) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`数据导入成功！`);
+        if(onRefresh){
+          onRefresh();
+        }
+      } else if (info.file.status === 'error') {
+        message.error(`数据导入失败`);
+      }
+    },
+  };
   return (
     <StyledTable>
       <StyledTableHeader>
@@ -186,15 +212,17 @@ const codesRadio=codes?.map(v => {
               </Button>
               </Popconfirm>
           ) : null}
-          {(onBatchImport && isAdmin ) ? (
-              <Button onClick={() =>onBatchImport(its?its:[])} title={t("batchImport")} style={{ marginLeft: "1rem", cursor: "pointer" }}>
-                {t("batchImport")}
-              </Button>
-          ) : null}
           {(onBatchExport && isAdmin) ? (
               <Button onClick={() =>onBatchExport(its?its:[])} title={t("batchExport")} style={{ marginLeft: "1rem", cursor: "pointer" }}>
                 {t("batchExport")}
               </Button>
+          ) : null}
+          {(onBatchImport && isAdmin ) ? (
+              <Upload action={importUrl}  {...props} >
+                <Button  title={t("batchImport")}  style={{ marginLeft: "1rem", cursor: "pointer" }}>
+                  {t("batchImport")}
+                </Button>
+              </Upload>
           ) : null}
           {(onBatchFinish && isAdmin) ? (
               <Button onClick={() =>onBatchFinish(its?its:[])} title={t("batchFinish")} style={{ marginLeft: "1rem", cursor: "pointer" }}>

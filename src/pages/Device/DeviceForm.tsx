@@ -212,6 +212,20 @@ const DeviceForm: FC<Props> = ({ visible, item, onSave, onCancel ,codes,deviceCo
             <DatePicker  showTime ></DatePicker>
           </Form.Item>
           <Form.Item
+              label={t("lastAuthenticationInstitution")}
+              name="lastAuthenticationInstitution"
+              rules={[{ required: false }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+              label={t("location")}
+              name="location"
+              rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
               label={t("validDate")}
               name="validDate"
               rules={[{ required: true }]

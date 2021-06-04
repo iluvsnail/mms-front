@@ -27,24 +27,26 @@ interface Props {
   onRefresh: () => void;
   setSelectedRows:(its:string[])=>void;
     onRecord: (item: ICriterion) => void;
+    importUrl:string;
 }
 
 const CriterionTable: FC<Props> = ({
   data,
     its,
-  loading,
-  onAdd,
+    loading,
+    onAdd,
     onDetail,
-                                    onBatchPrint,
+                                       onBatchPrint,
     onBatchExport,
     onBatchImport,
-  onBatchDel,
-  onEdit,
-  onDel,
-  onRefresh,
+    onBatchDel,
+    onEdit,
+    onDel,
+    onRefresh,
     setSelectedRows,
     onRecord,
-onUpdateTracing
+    onUpdateTracing,
+    importUrl
 }) => {
   const { t } = useTranslation(["criterion", "common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -146,6 +148,7 @@ onUpdateTracing
       onRefresh={onRefresh}
       its={its}
       isAdmin={isAdmin()}
+      importUrl={importUrl}
     />
   );
 };

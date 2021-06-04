@@ -33,5 +33,7 @@
   "batchExport": "导出",
   "selectCriterion": "选择标准",
   "criterion": "所属标准",
-  "selectStatus": "选择状态"
+  "selectStatus": "选择状态",
+  "lastAuthenticationInstitution": "末次检定机构",
+  "location": "存放位置"
 }

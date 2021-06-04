@@ -22,6 +22,9 @@ import {ITaskDevice} from "../../models/taskdevice";
 import {ICriterionTrace} from "../../models/criteriontrace";
 import RecordForm from "./RecordForm";
 import UpdateTraceForm from "./UpdateTraceForm";
+import {BASE_URL} from "../../utils/apiUtils";
+import api from "../../configs/api";
+import DeviceTable from "../Device/DeviceTable";
 
 const Criterion: FC = () => {
   const [list, setList] = useState<ICriterion[]>([]);
@@ -236,6 +239,7 @@ const Criterion: FC = () => {
         its={selectedRows}
         onRecord={onRecord}
         onUpdateTracing={onUpdateTracing}
+        importUrl={`${BASE_URL}/${api.criterion}/importCriterions`}
       />
       <CriterionForm
         visible={formVisible}

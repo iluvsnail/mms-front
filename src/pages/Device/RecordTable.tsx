@@ -9,10 +9,12 @@ import {ITask} from "../../models/task";
 
 interface Props {
   data: ITaskDevice[];
+  onPrint:(item:ITaskDevice)=>void;
 }
 
 const RecordTable: FC<Props> = ({
-    data
+    data,
+    onPrint
 }) => {
   const { t } = useTranslation(["taskdevice","device","task","common", "dict"]);
   const columns = useMemo(
@@ -24,7 +26,7 @@ const RecordTable: FC<Props> = ({
           },{
               title: t("task:result"),
               dataIndex: "result",
-              render:(v:string)=>t("result"+v)
+              render:(v:string)=>v?t("result"+v):""
           },{
               title: t("receivedDate"),
               dataIndex: "receivedDate",
@@ -57,7 +59,11 @@ const RecordTable: FC<Props> = ({
               title: t("endPerson"),
               dataIndex: "endPerson",
               sorter: (a: ITaskDevice, b: ITaskDevice) => a.endPerson.toString().localeCompare(b.endPerson.toString()),
-          },/*
+          },{
+              title: t("validDate"),
+              dataIndex: "validDate",
+              sorter: (a: ITaskDevice, b: ITaskDevice) => a.validDate.toString().localeCompare(b.validDate.toString()),
+          },
           {
               title: t("common:operations"),
               dataIndex: "OPERATIONS",
@@ -65,18 +71,15 @@ const RecordTable: FC<Props> = ({
                   <>
                       <Button
                           size="small"
-                          onClick={() => message.info("待实现")}
-                          title={t("showCriterion")}
+                          onClick={() => onPrint(r)}
+                          title={t("common:detail")}
                           type="link"
                       >
-                          {t("showCriterion")}
+                          {t("common:detail")}
                       </Button>
-
-
-
                   </>
               ),
-          },*/
+          },
       ],
       [t]
   );

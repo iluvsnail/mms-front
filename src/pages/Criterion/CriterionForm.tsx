@@ -193,6 +193,13 @@ const CriterionForm: FC<Props> = ({ visible, item, onSave, onCancel ,codes,insti
             <Input />
           </Form.Item>
           <Form.Item
+              label={t("location")}
+              name="location"
+              rules={[{ required: false }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
               label={t("notes")}
               name="notes"
               rules={[{ required: false }]}

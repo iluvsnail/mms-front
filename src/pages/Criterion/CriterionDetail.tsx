@@ -119,6 +119,12 @@ const CriterionDetail: FC<Props> = ({ visible, item, onSave,onCancel}) => {
             {item?.certificateNumber}
           </Form.Item>
           <Form.Item
+              label={t("location")}
+              name="location"
+          >
+            {item?.location}
+          </Form.Item>
+          <Form.Item
               label={t("notes")}
               name="notes"
           >

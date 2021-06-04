@@ -25,6 +25,7 @@ const BatchSendTable: FC<Props> = ({
         headers: {
             authorization: 'authorization-text',
         },
+        withCredentials:true,
         onChange(info:any) {
             if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);

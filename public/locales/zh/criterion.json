@@ -42,6 +42,7 @@
   "traceUnit": "溯源单位",
   "criterionNumber": "证书编号",
   "showCriterion": "显示证书",
-  "uploadCriterion": "上传溯源证书"
+  "uploadCriterion": "上传溯源证书",
+  "location": "存放位置"
 
 }

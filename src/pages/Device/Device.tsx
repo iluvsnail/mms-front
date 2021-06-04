@@ -21,6 +21,8 @@ import {IInstitution} from "../../models/institution";
 import {ITaskDevice} from "../../models/taskdevice";
 import RecordForm from "./RecordForm";
 import {asyncExportTasks} from "../Task/task.services";
+import {BASE_URL} from "../../utils/apiUtils";
+import api from "../../configs/api";
 
 const Device: FC = () => {
   const [list, setList] = useState<IDevice[]>([]);
@@ -266,6 +268,7 @@ const Device: FC = () => {
         setSelectedRows={setSelectedRows}
         its={selectedRows}
         onRecord={onRecord}
+        importUrl={`${BASE_URL}/${api.device}/importDevices`}
       />
       <DeviceForm
         visible={formVisible}

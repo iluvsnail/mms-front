@@ -26,6 +26,7 @@ interface Props {
   onPrint: (item: IDevice) => void;
   onRefresh: () => void;
   setSelectedRows:(its:string[])=>void;
+  importUrl:string;
 }
 
 const DeviceTable: FC<Props> = ({
@@ -43,7 +44,8 @@ const DeviceTable: FC<Props> = ({
     onPrint,
   onRefresh,
     setSelectedRows,
-    onRecord
+    onRecord,
+    importUrl
 }) => {
   const { t } = useTranslation(["device", "common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -155,6 +157,7 @@ const DeviceTable: FC<Props> = ({
       onRefresh={onRefresh}
       its={its}
       isAdmin={isAdmin()}
+      importUrl={importUrl}
     />
   );
 };
