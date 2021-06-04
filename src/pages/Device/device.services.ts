@@ -108,3 +108,11 @@ export const asyncExportDevices =  (data: string[]) => {
   link.click();
   document.body.removeChild(link);
 };
+
+export const asyncGetAlarmData = async (cb: AsyncCallback, data?:Record<string, unknown>) => {
+  const res = await YSAxios.post(`${api.device}/alarm`,data).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, []);
+};

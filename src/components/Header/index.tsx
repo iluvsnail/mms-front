@@ -1,34 +1,50 @@
 /** 上方标题栏 */
 import Avatar from "antd/lib/avatar/avatar";
-import React, {FC, useCallback, useContext, useState} from "react";
+import React, {FC, useCallback, useContext, useEffect, useState} from "react";
 import styled from "styled-components";
 import icon from "../../assets/icon.png";
 import {
   UserOutlined,
   DownOutlined,
-  TranslationOutlined,
 } from "@ant-design/icons";
-import {Button, Dropdown, Form, Input, Menu, message, Modal, Radio, Select} from "antd";
+import {Badge, Button, Dropdown, Form, Input, Menu, message, Modal, Popover, Radio, Select} from "antd";
 import { useTranslation } from "react-i18next";
 import { i18nKey, i18nList } from "../../i18n";
 import LanguageContext from "../../i18n/LanguageContext";
 import {clearToken, getItem} from "../../utils/tokenUtils";
 import {useHistory} from "react-router-dom";
-import {DatePicker} from "../YSDatePicker";
-import dayjs from "dayjs";
-import {DateTimeFormatString} from "../../constants/strings";
 import log from "loglevel";
-import {IDevice} from "../../models/device";
-import {asyncPutDevice} from "../../pages/Device/device.services";
 import {asyncChangePassword} from "../../pages/System/User/user.services";
+import { NotificationTwoTone} from '@ant-design/icons';
+import {IDevice} from "../../models/device";
+import {
+    asyncGetAlarmData,
+    asyncGetCodeData,
+    asyncGetDeviceCodeData,
+    asyncGetDeviceData,
+    asyncGetInstitutionCodeData
+} from "../../pages/Device/device.services";
 
 const Header: FC = () => {
   const { t, i18n } = useTranslation("common");
   const { setLanguage } = useContext(LanguageContext);
+    const [list, setList] = useState<IDevice[]>([]);
+    const loadData = useCallback(() => {
+        asyncGetAlarmData((res) => {
+            if (res.isOk) {
+                setList(res.data);
+            }
+        });
+    }, []);
 
+    useEffect(() => {
+        loadData();
+        return () => setList([]);
+    }, [loadData]);
   const history = useHistory();
     const [form] = Form.useForm();
     const [visible, setVisible] = useState(false);
+    const [pVisible, setPVisible] = useState(false);
     const onChangeLanguage = useCallback(
     (newLanguage: i18nKey) => {
       i18n.changeLanguage(newLanguage);
@@ -88,7 +104,7 @@ const Header: FC = () => {
     </Menu>
   );
 
-  const i18nOverlay = (
+  /*const i18nOverlay = (
     <Menu
       selectedKeys={[i18n.language]}
       onClick={({ key }) => onChangeLanguage(key as i18nKey)}
@@ -101,12 +117,15 @@ const Header: FC = () => {
         </Menu.Item>
       ))}
     </Menu>
-  );
-
+  );*/
+    const handleVisibleChange = (v:boolean) => {
+        setPVisible(v);
+    }
   return (
     <StyledHeader>
       <StyledHeaderIcon />
       <StyledHeaderTitle>{t("APP_TITLE")}</StyledHeaderTitle>
+
       <Dropdown overlay={userOverlay}>
         <StyledHeaderUser>
           <Avatar
@@ -118,11 +137,37 @@ const Header: FC = () => {
           <DownOutlined />
         </StyledHeaderUser>
       </Dropdown>
-      <Dropdown overlay={i18nOverlay}>
+        <div style={{width:"1em"}}>
+
+            <Popover
+                content={(<>
+                <ul style={{width:"30em"}}>
+                    {
+                        list.map(device=>{
+                            return (<li style={{listStyle:"none",marginBottom:".5em"}}>
+                                {device?.offset<0?`设备 ${device.deviceName} 已超过检定有效期，请及时处理。`:`设备 ${device.deviceName}  距检定有效期失效还有 ${device.offset} 天，请及时处理。`}
+                            </li>);
+                        })
+                    }
+                </ul>
+                </>)}
+                title=""
+                trigger="click"
+                visible={pVisible}
+                onVisibleChange={handleVisibleChange}
+            >
+            <Badge count={list.length}
+                   style={{ marginRight: "1rem",marginLeft:".5em"}}>
+                <NotificationTwoTone
+                    style={{ marginRight: "1rem",marginLeft:".5em",fontSize:"20px"}}></NotificationTwoTone>
+            </Badge>
+            </Popover>
+        </div>
+      {/*<Dropdown overlay={i18nOverlay}>
         <StyledHeaderI18n>
           <TranslationOutlined />
         </StyledHeaderI18n>
-      </Dropdown>
+      </Dropdown>*/}
         <Modal
             visible={visible}
             afterClose={onClose}
