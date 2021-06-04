@@ -29,6 +29,7 @@ export const asyncPostDemo = async (data: ICriterion, cb: AsyncCallback) => {
 };
 
 export const asyncPutDeviceType = async (data: IDeviceType, cb: AsyncCallback) => {
+  if(!data.criterion.id)data.criterion={criterionName: "", id: String(data.criterion)}
   const res = await YSAxios.put(`${api.deviceType}`, data).catch((e) => {
     message.error(e.message);
     return e;

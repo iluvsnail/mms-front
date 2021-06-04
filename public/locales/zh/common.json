@@ -22,11 +22,11 @@
   "cancel": "取消",
   "operations": "操作",
   "confirmDelete": "确认删除？",
-  "confirmLock": "确认锁定？",
+  "confirmLock": "确认锁定用户？",
   "confirmResetPassword": "确认重置密码？",
   "status": "当前状态",
   "batchDel": "批量删除",
-  "lock": "冻结",
+  "lock": "锁定",
   "resetPassword": "重置密码",
   "detail": "详情",
   "batchPrint": "打印",
@@ -47,5 +47,7 @@
   "batchUploadReport": "批量上传检定报告",
   "batchSend": "批量发放",
   "send": "发放",
-  "downloadTemplate": "下载模板"
+  "downloadTemplate": "下载模板",
+  "unlock": "解锁",
+  "confirmUnlock": "确定解锁用户？"
 }

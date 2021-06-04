@@ -19,20 +19,22 @@ interface Props {
 const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
   const [form] = Form.useForm();
   const { t } = useTranslation(["taskdevice","task", "common"]);
-
+  const [fileList,setFileList] =useState<any[]>([])
 
   useEffect(() => {
     if (visible && item && form) {
       if(item.detectedDate) item.detectedDate = dayjs(item.detectedDate);
       if(item.validDate) item.validDate = dayjs(item.validDate);
-
       form.setFieldsValue(item);
     }
-  }, [visible, item, form]);
+  }, [visible, item, form,fileList]);
 
   const afterClose = useCallback(() => {
     form.resetFields();
-  }, [form]);
+    //清空文件
+    setFileList([])
+
+  }, [form,fileList]);
 
   const onOk = useCallback(() => {
     form
@@ -50,7 +52,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {
@@ -74,6 +76,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败`);
       }
+      setFileList(info.fileList)
     },
   };
 
@@ -129,7 +132,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
           <Form.Item
               label={t("report")}
           >
-            <Upload {...props}>
+            <Upload fileList={fileList} {...props}>
               <Button type="primary"  title={t("upload")}>
                 {t("uploadReport")}
               </Button>

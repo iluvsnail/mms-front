@@ -42,7 +42,7 @@ const ScanForm: FC<Props> = ({ visible, item, onSave, onCancel,task}) => {
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
             device:{factoryNumber:values.factoryNumber},
             task:task
           });

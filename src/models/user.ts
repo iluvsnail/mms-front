@@ -9,7 +9,7 @@ export interface IUser {
   isDelete:string;
   password:string;
   position:string;
-  special:string;
+  special:any;
   isLock: IsLock;
   role:IRole;
   createDate: number;

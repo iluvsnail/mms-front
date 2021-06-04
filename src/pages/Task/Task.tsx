@@ -62,13 +62,28 @@ const Task: FC = () => {
     });
   },[]);
   const onBatchFinish=useCallback((its:string[]) => {
+    let rst = true;
+    list.map(it=>{
+      if(!rst) return;
+      its.filter(i=>i==it.id).map(i=>{
+        if(!(it && it.instrumentCount >0 && it.receivedDeviceCount >0 && it.receivedDeviceCount== it.detectedDeviceCount && it.receivedDeviceCount == it.sentDeviceCount)){
+          rst = false;
+          return;
+        }
+      })
+    })
+    if(rst) {
     asyncFinishTasks(its, (res) => {
       if (res.isOk) {
         message.success("操作成功");
         onRefresh()
       }
-    });
-  },[]);
+    });}else{
+      message.warn("您所选择的任务中存在任务流程未全部完成的任务，请先完成相关任务流程！")
+      return false;
+
+    }
+  },[list]);
   const onBatchLock = useCallback((its:string[]) => {
     asyncLockUsers(its, (res) => {
       if (res.isOk) {
@@ -182,7 +197,8 @@ const Task: FC = () => {
     setSelected(its)
   }
   const onFinish = useCallback((data: ITask) => {
-    asyncFinishTask(data, (res) => {
+    if(data && data.instrumentCount >0 && data.receivedDeviceCount >0 && data.receivedDeviceCount== data.detectedDeviceCount && data.receivedDeviceCount == data.sentDeviceCount){
+      asyncFinishTask(data, (res) => {
       if (res.isOk) {
         message.success("操作成功");
         setList((prev) =>
@@ -194,7 +210,10 @@ const Task: FC = () => {
             })
         );
       }
-    });
+    });}else{
+      message.warn("任务流程未全部完成，请先完成相关任务流程！")
+      return false;
+    }
   }, []);
   return (
     <StyledContainer>

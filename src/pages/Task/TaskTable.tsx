@@ -101,14 +101,22 @@ const TaskTable: FC<Props> = ({
               >
                   {t("task:enterTask")}
               </Button>
-              {/*<Button
+              <Button
+                  size="small"
+                  onClick={() => onEdit(r)}
+                  title={t("common:edit")}
+                  type="link"
+              >
+                  {t("common:edit")}
+              </Button>
+              {<Button
                   size="small"
                   onClick={() => onDetail(r)}
                   title={t("common:detail")}
                   type="link"
               >
                   {t("common:detail")}
-              </Button>*/}
+              </Button>}
               {isAdmin()?(<>
             <Popconfirm
               onConfirm={() => onDel(r)}

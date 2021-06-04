@@ -5,30 +5,29 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import log from "loglevel";
 import {IRole} from "../../../models/role";
+import {ICodecriterion} from "../../../models/codecriterion";
 
 interface Props {
   visible: boolean;
   item?: IUser;
   onSave: (data: IUser) => void;
   onCancel: () => void;
-  roles:IRole[]
+  roles:IRole[];
+  codes:ICodecriterion[];
 }
 
-const UserForm: FC<Props> = ({ visible, item, onSave, onCancel ,roles}) => {
+const UserForm: FC<Props> = ({ visible, item, onSave, onCancel ,roles,codes}) => {
   const [form] = Form.useForm();
   const { Option } = Select;
   const { t } = useTranslation(["user", "common"]);
-
-  // let currentEditOption:IRole= {
-  //   createDate: 0, isDelete: "", isLock: 0, name: "", updateDate: 0,
-  //   id: item?.role.id || '',
-  //   note: item?.role.note || ''
-  // };
 
   const [rolesOption, setRolesOption] = useState({id: '',  note:''})
 
   useEffect(() => {
     if (visible && item && form) {
+      if(item.special){
+        item.special = item.special.split(",")
+      }
       form.setFieldsValue(item);
       setRolesOption({
         id: item?.role.id || '',
@@ -43,34 +42,40 @@ const UserForm: FC<Props> = ({ visible, item, onSave, onCancel ,roles}) => {
   }, [form]);
 
   const onOk = useCallback(() => {
+
     form
         .validateFields()
         .then((values) => {
           const now = dayjs().valueOf();
+          let sp = "";
+          if(values.special && values.special.length>0){
+            for(let n in values.special){
+              sp=sp+values.special[n];
+              if(n!=new String((values.special.length-1))){
+                sp=sp+",";
+              }
+            }
+          }
+          debugger;
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+            special:sp,
+            role:rolesOption.id
           });
         })
         .catch((e) => {
           log.error(e);
         });
-  }, [form, onSave]);
+  }, [form, onSave,rolesOption]);
 
   function roleChange(value:any,option:any) {
     setRolesOption({
       id: value, note: option.children
     })
-    // console.log(item)
-    // currentEditOption.id=value
-    // currentEditOption.note=option.children;
-    // if(item){
-    //   item.role = currentEditOption
-    // }
-    // form.setFieldsValue(item);
   }
-
+  function codeChange(value:any,option:any) {
+  }
   return (
       <Modal
           visible={visible}
@@ -125,12 +130,26 @@ const UserForm: FC<Props> = ({ visible, item, onSave, onCancel ,roles}) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
+          {/*<Form.Item
               label={t("special")}
               name="special"
               rules={[{ required: true }]}
           >
             <Input />
+          </Form.Item>*/}
+          <Form.Item
+              label={t("special")}
+              name="special"
+              rules={[{ required: true }]}
+          >
+            {
+              <Select mode="tags" tokenSeparators={[',']}  onChange={codeChange} >
+                {
+                  codes.map(it =>{
+                    return (<Option key={it.id} value={it.criterionName.replace("标准","")}>{it.criterionName.replace("标准","")}</Option>)}
+                  )
+                }
+              </Select>}
           </Form.Item>
           <Form.Item
               label={t("department")}

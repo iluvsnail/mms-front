@@ -47,7 +47,7 @@ const InstitutionForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level})
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {

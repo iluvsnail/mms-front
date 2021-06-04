@@ -17,10 +17,12 @@ interface Props {
   onBatchDel:(its:string[])=>void;
   onBatchLock:(its:string[])=>void;
   onBatchResetPassword:(its:string[])=>void;
+    onBatchUnlock:(its:string[])=>void;
   onEdit: (item: IUser) => void;
   onDel: (item: IUser) => void;
   onResetPassword: (item: IUser) => void;
   onLock: (item: IUser) => void;
+    onUnlock: (item: IUser) => void;
   onRefresh: () => void;
   setSelectedRows:(its:string[])=>void;
 }
@@ -39,6 +41,8 @@ const UserTable: FC<Props> = ({
     onLock,
   onRefresh,
     setSelectedRows,
+    onBatchUnlock,
+    onUnlock
 }) => {
   const { t } = useTranslation(["user", "common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -121,6 +125,14 @@ const UserTable: FC<Props> = ({
               </Button>
           </Popconfirm>
               <Popconfirm
+                  onConfirm={() => onUnlock(r)}
+                  title={t("common:confirmUnlock")}
+              >
+                  <Button size="small" title={t("common:unlock")} type="link">
+                      {t("common:unlock")}
+                  </Button>
+              </Popconfirm>
+              <Popconfirm
                   onConfirm={() => onResetPassword(r)}
                   title={t("common:confirmResetPassword")}
               >
@@ -162,6 +174,7 @@ const UserTable: FC<Props> = ({
       onBatchDel={onBatchDel}
       onBatchLock={onBatchLock}
       onBatchResetPassword={onBatchResetPassword}
+      onBatchUnlock={onBatchUnlock}
       onRefresh={onRefresh}
       its={its}
       isAdmin={isAdmin()}

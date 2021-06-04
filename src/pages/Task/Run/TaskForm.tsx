@@ -50,7 +50,7 @@ const TaskForm: FC<Props> = ({ visible, item, onSave, onCancel ,codes}) => {
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {

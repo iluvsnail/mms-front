@@ -13,10 +13,12 @@ import {
   asyncLockUser,
   asyncResetPassword,
   asyncLockUsers,
-  asyncResetUsersPassword
+  asyncResetUsersPassword, asyncUnlockUser, asyncUnlockUsers
 } from "./user.services";
 import UserForm from "./UserForm";
 import { message } from "antd";
+import {ICodecriterion} from "../../../models/codecriterion";
+import {asyncGetCodeData} from "../../Device/device.services";
 
 const User: FC = () => {
   const [list, setList] = useState<IUser[]>([]);
@@ -26,6 +28,7 @@ const User: FC = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [params, setParams] = useState<Record<string, unknown>>();
   let [selectedRows,setSelected]=useState<string[]>([])
+  const [codes,setCodes] = useState<ICodecriterion[]>([]);
   useEffect(()=>{
     setSelected(selectedRows)
   },[selectedRows])
@@ -40,6 +43,11 @@ const User: FC = () => {
     asyncGetRoleData((res) => {
       if (res.isOk) {
         setRoles(res.data);
+      }
+    });
+    asyncGetCodeData((res) => {
+      if (res.isOk) {
+        setCodes(res.data);
       }
     });
   }, []);
@@ -64,6 +72,14 @@ const User: FC = () => {
     asyncLockUsers(its, (res) => {
       if (res.isOk) {
         message.success("锁定用户成功");
+        onRefresh()
+      }
+    });
+  }, []);
+  const onBatchUnlock = useCallback((its:string[]) => {
+    asyncUnlockUsers(its, (res) => {
+      if (res.isOk) {
+        message.success("解锁用户成功");
         onRefresh()
       }
     });
@@ -112,7 +128,22 @@ const User: FC = () => {
   const onLock = useCallback((data: IUser) => {
     asyncLockUser(data, (res) => {
       if (res.isOk) {
-        message.success("冻结用户成功");
+        message.success("锁定用户成功");
+        setList((prev) =>
+            prev.map((p) => {
+              if (p.userName === data.userName) {
+                return res.data;
+              }
+              return p;
+            })
+        );
+      }
+    });
+  }, []);
+  const onUnLock = useCallback((data: IUser) => {
+    asyncUnlockUser(data, (res) => {
+      if (res.isOk) {
+        message.success("解锁用户成功");
         setList((prev) =>
             prev.map((p) => {
               if (p.userName === data.userName) {
@@ -193,10 +224,12 @@ const User: FC = () => {
         onBatchDel={onBatchDel}
         onBatchLock={onBatchLock}
         onBatchResetPassword={onBatchResetPassword}
+        onBatchUnlock={onBatchUnlock}
         onEdit={onEdit}
         onDel={onDel}
         onResetPassword={onResetPassword}
         onLock={onLock}
+        onUnlock={onUnLock}
         onRefresh={onRefresh}
         setSelectedRows={setSelectedRows}
         its={selectedRows}
@@ -207,6 +240,7 @@ const User: FC = () => {
         onSave={onSave}
         onCancel={onClose}
         roles = {roles}
+        codes={codes}
       />
     </StyledContainer>
   );

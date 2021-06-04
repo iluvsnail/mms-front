@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo, useState} from "react";
 import { StyledContainer } from "../../../components/StyledComponents";
-import {ICodecriterion} from "../../../models/codecriterion";
 import {
   asyncDelDeviceType, asyncDownloadTemplate,
   asyncGetDeviceTypeData,
@@ -13,17 +12,20 @@ import {IDeviceType} from "../../../models/devicetype";
 import {useTranslation} from "react-i18next";
 import {BASE_URL} from "../../../utils/apiUtils";
 import api from "../../../configs/api";
-import {asyncExportTasks} from "../../Task/task.services";
+import {asyncGetCodeData} from "../../Device/device.services";
+import {ICodecriterion} from "../../../models/codecriterion";
 const DeviceType: FC = () => {
   const { t } = useTranslation(["deviceType", "common", "dict"]);
   const [list, setList] = useState<IDeviceType[]>([]);
   const [pt, setPt] = useState<string>("");
   const [level, setLevel] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [fileList,setFileList] =useState<any[]>([]);
   const [item, setItem] = useState<IDeviceType>();
   const [formVisible, setFormVisible] = useState(false);
   const [treeData,setTreeData] = useState<{key:string}[]>([])
   let [selectedRows,setSelected]=useState<string[]>([])
+  const [codes,setCodes] = useState<ICodecriterion[]>([]);
   const [form] = Form.useForm();
   useEffect(() => {
     if (item && form) {
@@ -37,6 +39,12 @@ const DeviceType: FC = () => {
     asyncGetDeviceTypeData((res) => {
       if (res.isOk) {
         setList(res.data);
+      }
+    });
+
+    asyncGetCodeData((res) => {
+      if (res.isOk) {
+        setCodes(res.data);
       }
     });
   }, []);
@@ -208,6 +216,7 @@ const DeviceType: FC = () => {
       list.filter(ist=>ist.id==sk).forEach(v=>{
         if(v.level=="2"){
           setItem(v)
+          setFileList([])
         }else{
           setItem(undefined)
         }
@@ -234,6 +243,7 @@ const DeviceType: FC = () => {
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败`);
       }
+      setFileList(info.fileList);
     },
   };
 
@@ -265,6 +275,24 @@ const DeviceType: FC = () => {
                 {item?.name}
               </Form.Item>
               <Form.Item
+                  label={t("standardType")}
+                  name="standardType"
+              >
+                {item?.standardType}
+              </Form.Item>
+              <Form.Item
+                  label={t("criterionName")}
+                  name="criterion"
+              >
+                {item?.criterion?.criterionName}
+              </Form.Item>
+              <Form.Item
+                  label={t("cycle")}
+                  name="cycle"
+              >
+                {item?.cycle}
+              </Form.Item>
+              <Form.Item
                   label={t("downloadTemplate")}
               >
                 <Button onClick={() =>onDownloadTemplate()} title={t("downloadTemplate")} type="link" style={{cursor: "pointer" }}>
@@ -283,7 +311,7 @@ const DeviceType: FC = () => {
             </Row>
             <Row>
               <Col span={4} offset={10}>
-                <Upload {...props}>
+                <Upload fileList={fileList} {...props}>
                 <Button type="primary"  title={t("upload")}>
                    {t("uploadTemplate")}
                 </Button>
@@ -299,6 +327,7 @@ const DeviceType: FC = () => {
           pt={pt}
           level={level}
           item={item}
+          codes={codes}
       ></DeviceTypeForm>
     </StyledContainer>
   );

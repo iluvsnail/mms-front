@@ -3,8 +3,6 @@ import api from "../../../configs/api";
 import { AsyncCallback } from "../../../models/common";
 import { IUser } from "../../../models/user";
 import YSAxios, { callback } from "../../../utils/YSAxios";
-import {IDevice} from "../../../models/device";
-
 export const asyncGetUserData = async (cb: AsyncCallback,data?:Record<string, unknown>) => {
   const res = await YSAxios.post(api.userList,data).catch((e) => {
     message.error(e.message);
@@ -57,6 +55,13 @@ export const asyncLockUser = async (data: IUser, cb: AsyncCallback) => {
   });
   callback(res, cb);
 };
+export const asyncUnlockUser = async (data: IUser, cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.user}/unlock/${data.userName}`).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb);
+};
 export const asyncDelUsers = async (data: string[], cb: AsyncCallback) => {
   const res = await YSAxios.post(`${api.user}/users/delete`,data).catch((e) => {
     message.error(e.message);
@@ -66,6 +71,13 @@ export const asyncDelUsers = async (data: string[], cb: AsyncCallback) => {
 };
 export const asyncLockUsers = async (data: string[], cb: AsyncCallback) => {
   const res = await YSAxios.post(`${api.user}/users/lock`,data).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb);
+};
+export const asyncUnlockUsers = async (data: string[], cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.user}/users/unlock`,data).catch((e) => {
     message.error(e.message);
     return e;
   });

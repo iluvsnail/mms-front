@@ -15,14 +15,7 @@ interface Props {
 
 const TaskDetail: FC<Props> = ({ visible, item, onSave,onCancel}) => {
   const [form] = Form.useForm();
-  const { Option } = Select;
-  const { t } = useTranslation(["device", "common"]);
-
-  // let currentEditOption:IRole= {
-  //   createDate: 0, isDelete: "", isLock: 0, name: "", updateDate: 0,
-  //   id: item?.role.id || '',
-  //   note: item?.role.note || ''
-  // };
+  const { t } = useTranslation(["task", "common"]);
 
   useEffect(() => {
     form.setFieldsValue(item);
@@ -42,57 +35,37 @@ const TaskDetail: FC<Props> = ({ visible, item, onSave,onCancel}) => {
           onCancel={onCancel}
           maskClosable={false}
           forceRender
-          title={"设备"+t("common:detail")}
+          title={"任务"+t("common:detail")}
       >
         <Form
             form={form}
             labelCol={{ span: 6 }}
             wrapperCol={{ offset: 1, span: 16 }}
         >
-         {/* <Form.Item
-              label={t("deviceName")}
-              name="deviceName"
+          <Form.Item
+              label={t("name")}
+              name="name"
           >
-            {item?.deviceName}
+            {item?.name}
           </Form.Item>
           <Form.Item
-          label={t("criterionName")}
-          name="criterionName"
+              label={t("startDate")}
+              name="startDate"
           >
-          {item?.criterion.criterionName}
-        </Form.Item>
-          <Form.Item
-              label={t("standardType")}
-              name="standardType"
-          >
-            {item?.standardType}
+            {item?.startDate}
           </Form.Item>
           <Form.Item
-              label={t("factoryNumber")}
-              name="factoryNumber"
+              label={t("finishDate")}
+              name="finishDate"
           >
-            {item?.factoryNumber}
+            {item?.finishDate}
           </Form.Item>
           <Form.Item
-              label={t("manufacturer")}
-              name="manufacturer"
-          >
-            {item?.manufacturer}
-          </Form.Item>
-          <Form.Item
-              label={t("currentStatus")}
+              label={t("status")}
               name="status"
           >
-            {item?.status=="0"?t("status0"):t("status1")}
+            {item?.status?t(`status${item?.status}`):""}
           </Form.Item>
-
-          <Form.Item
-              label={t("dutyUnit")}
-              name="dutyUnit"
-          >
-            {item?.dutyUnit}
-          </Form.Item>
-
           <Form.Item
               label={t("dutyPerson")}
               name="dutyPerson"
@@ -100,44 +73,37 @@ const TaskDetail: FC<Props> = ({ visible, item, onSave,onCancel}) => {
             {item?.dutyPerson}
           </Form.Item>
           <Form.Item
-              label={t("verifier")}
-              name="verifier"
+              label={t("createUser")}
+              name="createUser"
           >
-            {item?.verifier}
+            {item?.createUser}
           </Form.Item>
 
           <Form.Item
-              label={t("lastAuthenticationDate")}
-              name="lastAuthenticationDate"
+              label={t("instrumentCount")}
+              name="instrumentCount"
           >
-            {item?.lastAuthenticationDate}
+            {item?.instrumentCount}
           </Form.Item>
           <Form.Item
-              label={t("validDate")}
-              name="validDate"
+              label={t("receivedDeviceCount")}
+              name="receivedDeviceCount"
           >
-            {item?.validDate}
+            {item?.receivedDeviceCount}
           </Form.Item>
           <Form.Item
-              label={t("notes")}
-              name="notes"
+              label={t("detectedDeviceCount")}
+              name="detectedDeviceCount"
           >
-            {item?.notes}
-          </Form.Item>*/}
-          <div style={{ display: "none" }}>
-            <Form.Item label="id" name="id">
-              <Input />
-            </Form.Item>
-            <Form.Item label="createDate" name="createDate">
-              <Input />
-            </Form.Item>
-            <Form.Item label="updateDate" name="updateDate">
-              <Input />
-            </Form.Item>
-            <Form.Item label="isDelete" name="isDelete">
-              <Input />
-            </Form.Item>
-          </div>
+            {item?.detectedDeviceCount}
+          </Form.Item>
+          <Form.Item
+              label={t("sentDeviceCount")}
+              name="sentDeviceCount"
+          >
+            {item?.sentDeviceCount}
+          </Form.Item>
+
         </Form>
       </Modal>
   );

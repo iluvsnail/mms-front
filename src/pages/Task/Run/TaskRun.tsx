@@ -143,21 +143,23 @@ const TaskRun: FC = () => {
   }, [loadSelectedData]);
 
   const filteredCriterionList = useMemo(() => {
-    if (params) {
-      let result = [...criterionList];
-      if (params.instrumentName) {
-        result = result.filter(r => r.instrumentName?.includes(params.instrumentName as string));
-      }
-      return result;
-    }
+    let result = [...criterionList];
     if (codeV) {
-      let result = [...criterionList];
       result = result.filter(r => r.criterion.id == codeV);
-      return result;
     }
-    return criterionList;
+    if(!isAdmin()){
+      //仅显示选中结果
+      result= result.filter(r=>{
+        let rst = false;
+        selectedRows.map(sr=>{
+          if(sr==r.id) rst= true;
+        })
+        return rst;
+      })
+    }
+    return result;
 
-  }, [params, criterionList,codeV]);
+  }, [params, criterionList,codeV,selectedRows]);
 
   const filteredDeviceList = useMemo(() => {
     if (deviceParams) {
@@ -228,12 +230,17 @@ const TaskRun: FC = () => {
     setSelected(its)
   }
   const onFinish = useCallback((data: ITask) => {
-    asyncFinishTask(data, (res) => {
+    if(data && data.instrumentCount >0 && data.receivedDeviceCount >0 && data.receivedDeviceCount== data.detectedDeviceCount && data.receivedDeviceCount == data.sentDeviceCount){
+
+      asyncFinishTask(data, (res) => {
       if (res.isOk) {
         message.success("操作成功");
         if(res.data) setItem(res.data)
       }
-    });
+    });}else{
+      message.warn("任务流程未全部完成，请先完成相关任务流程！")
+      return false;
+    }
   }, []);
   const onSave = useCallback(
       (data: ITask) => {
@@ -260,7 +267,7 @@ const TaskRun: FC = () => {
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {

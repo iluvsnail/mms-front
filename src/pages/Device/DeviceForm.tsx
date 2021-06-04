@@ -73,7 +73,7 @@ const DeviceForm: FC<Props> = ({ visible, item, onSave, onCancel ,codes,deviceCo
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
             deviceName:deviceOption.name,
             dutyUnit:dutyOption.name
           });

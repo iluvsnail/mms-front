@@ -47,7 +47,7 @@ const ConfigForm: FC<Props> = ({ visible, item, onSave, onCancel ,roles}) => {
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {

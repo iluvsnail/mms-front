@@ -62,7 +62,7 @@ const CriterionForm: FC<Props> = ({ visible, item, onSave, onCancel ,codes,insti
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
             dutyUnit:dutyOption.name
           });
         })

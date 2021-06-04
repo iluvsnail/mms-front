@@ -23,6 +23,7 @@ const onRejected = (err: any): Promise<void> => {
     switch (err.response.status) {
       case 401:
       case 502:
+      case 405:
         clearAndBackLogin();
         return new Promise(() => {});
       default:

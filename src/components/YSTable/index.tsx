@@ -42,6 +42,7 @@ interface Props<RecordType = any> extends TableProps<RecordType> {
   onBatchUploadReport?: (its:string[]) => void;
   onBatchSend?: (its:string[]) => void;
   onBatchResetPassword?: (its:string[]) => void;
+  onBatchUnlock?: (its:string[]) => void;
   onBatchImport?:(its:string[])=>void;
   onBatchExport?:(its:string[])=>void;
   onBatchFinish?:(its:string[])=>void;
@@ -75,6 +76,7 @@ const YSTable: FC<Props> = ({
     onBatchExport,
                               onBatchFinish,
                               onUpdateTracing,
+    onBatchUnlock,
   onRefresh,
     onScan,
     onBatchReceived,
@@ -199,6 +201,17 @@ const codesRadio=codes?.map(v => {
                        style={{ marginLeft: "1rem", cursor: "pointer" }}>
                 {t("lock")}
               </Button>
+              </Popconfirm>
+          ) : null}
+          {onBatchUnlock ? (
+              <Popconfirm
+                  onConfirm={() => onBatchUnlock(its?its:[])}
+                  title={t("common:confirmUnlock")}
+              >
+                <Button  title={t("unlock")}
+                         style={{ marginLeft: "1rem", cursor: "pointer" }}>
+                  {t("unlock")}
+                </Button>
               </Popconfirm>
           ) : null}
           {onBatchResetPassword ? (

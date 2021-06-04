@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import YSTable from "../../../components/YSTable";
 import {ICriterion} from "../../../models/criterion";
 import {ICodecriterion} from "../../../models/codecriterion";
+import {isAdmin} from "../../../utils/tokenUtils";
 
 interface Props {
   data: ICriterion[];
@@ -64,24 +65,39 @@ const TaskRunCriterionTable: FC<Props> = ({
       ],
       [t]
   );
+  if(isAdmin()){
+      return (
+          <YSTable
+              rowKey="id"
+              dataSource={data}
+              loading={loading}
+              rowSelection={{
+                  type: "checkbox",
+                  onChange:onSelectChange,
+                  selectedRowKeys:its,
+              }}
+              columns={columns}
+              its={its}
+              codes={codes}
+              onCodeChange={onCodeChange}
+              onSearch={onSearch}
+          />
+      );
+  }else{
+      return (
+          <YSTable
+              rowKey="id"
+              dataSource={data}
+              loading={loading}
+              columns={columns}
+              its={its}
+              codes={codes}
+              onCodeChange={onCodeChange}
+              onSearch={onSearch}
+          />
+      );
+  }
 
-  return (
-    <YSTable
-      rowKey="id"
-      dataSource={data}
-      loading={loading}
-      rowSelection={{
-          type: "checkbox",
-          onChange:onSelectChange,
-          selectedRowKeys:its,
-      }}
-      columns={columns}
-      its={its}
-      codes={codes}
-      onCodeChange={onCodeChange}
-      onSearch={onSearch}
-    />
-  );
 };
 
 export default TaskRunCriterionTable;

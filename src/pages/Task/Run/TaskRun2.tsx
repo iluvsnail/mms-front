@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import {useHistory, useLocation,useParams} from "react-router-dom";
 import { StyledContainer } from "../../../components/StyledComponents";
 import TaskRunCriterionTable from "./TaskRunCriterionTable";
 import {ICodecriterion} from "../../../models/codecriterion";
@@ -69,12 +68,10 @@ const TaskRun2: FC = () => {
   const [params, setParams] = useState<Record<string, unknown>>();
   const [deviceParams, setDeviceParams] = useState<Record<string, unknown>>();
   const [form] = Form.useForm();
-  const location = useLocation();
   let [selectedRows,setSelected]=useState<string[]>([])
   let [selectedDeviceRows,setDeviceSelected]=useState<string[]>([])
   //
   useEffect(() => {
-    setItem(location.state ? location.state as ITask : undefined);
     if (item && form) {
       form.setFieldsValue(item);
     }
@@ -149,21 +146,23 @@ const TaskRun2: FC = () => {
   }, [loadSelectedData]);
 
   const filteredCriterionList = useMemo(() => {
-    if (params) {
-      let result = [...criterionList];
-      if (params.instrumentName) {
-        result = result.filter(r => r.instrumentName?.includes(params.instrumentName as string));
-      }
-      return result;
-    }
+    let result = [...criterionList];
     if (codeV) {
-      let result = [...criterionList];
       result = result.filter(r => r.criterion.id == codeV);
-      return result;
     }
-    return criterionList;
+    if(!isAdmin()){
+      //仅显示选中结果
+      result= result.filter(r=>{
+        let rst = false;
+        selectedRows.map(sr=>{
+          if(sr==r.id) rst= true;
+        })
+        return rst;
+      })
+    }
+    return result;
 
-  }, [params, criterionList,codeV]);
+  }, [params, criterionList,codeV,selectedRows]);
 
   const filteredDeviceList = useMemo(() => {
     if (deviceParams) {
@@ -177,7 +176,6 @@ const TaskRun2: FC = () => {
   }, [deviceParams, deviceList]);
   //组装taskdevice
   useEffect(() => {
-    debugger;
     if(deviceList && deviceList.length>0){
       const tdl:ITaskDevice[] = []
       deviceList.map((device)=>{
@@ -233,14 +231,19 @@ const TaskRun2: FC = () => {
   const setSelectedRows=(its:string[])=>{
     setSelected(its)
   }
-  const onFinish = useCallback((data: ITask) => {
+  const onFinish = useCallback((data?: ITask) => {
+    debugger;
+    if(data && data.instrumentCount >0 && data.receivedDeviceCount >0 && data.receivedDeviceCount== data.detectedDeviceCount && data.receivedDeviceCount == data.sentDeviceCount){
     asyncFinishTask(data, (res) => {
       if (res.isOk) {
         message.success("操作成功");
         if(res.data) setItem(res.data)
       }
-    });
-  }, []);
+    });}else{
+      message.warn("任务流程未全部完成，请先完成相关任务流程！")
+      return false;
+    }
+  }, [item]);
   const onSave = useCallback(
       (data: ITask) => {
         asyncPutTask(data, (res) => {
@@ -266,7 +269,7 @@ const TaskRun2: FC = () => {
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {
@@ -746,9 +749,8 @@ const TaskRun2: FC = () => {
           {
           isAdmin()?(
           <Row >
-            <Col span={2} offset={9}><Button type="primary" onClick={() => {
-              if(item)onFinish(item)
-            }} title={t("finish")}>
+            <Col span={2} offset={9}><Button type="primary" onClick={()=>
+              onFinish(item)} title={t("finish")}>
               {t("finish")}
             </Button></Col>
             <Col span={2}><Button onClick={() => {

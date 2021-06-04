@@ -42,7 +42,7 @@ const ReceiveForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {

@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import log from "loglevel";
 import {ICriterion} from "../../../models/criterion";
 import {IDeviceType} from "../../../models/devicetype";
+import {ICodecriterion} from "../../../models/codecriterion";
 
 interface Props {
   visible: boolean;
@@ -13,19 +14,31 @@ interface Props {
   item?: IDeviceType;
   onSave: (data: IDeviceType) => void;
   onCancel: () => void;
+  codes:ICodecriterion[];
 }
 
-const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level}) => {
+const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,codes}) => {
   const [form] = Form.useForm();
+  const { Option } = Select;
   const { t } = useTranslation(["deviceType", "common"]);
+  const [rolesOption, setRolesOption] = useState({id: '',  criterionName:''})
 
   useEffect(() => {
     if (visible && item && form) {
       form.setFieldsValue(item);
+      setRolesOption({
+        id: item?.criterion?.id || '',
+        criterionName: item?.criterion?.criterionName || ''})
     }else{
-      item = {createDate: 0, id: "", isDelete: "0", level: level, name: "", pt: pt, updateDate: 0}
+      item = {
+        criterion: {id:"",criterionName:""} ,
+        cycle: "",
+        standardType: "",
+        ys: undefined,
+        createDate: 0, id: "", isDelete: "0", level: level, name: "", pt: pt, updateDate: 0}
       form.setFieldsValue(item);
 
+      setRolesOption({id:'',criterionName:''})
     }
   }, [visible, item, form,pt,level]);
 
@@ -41,14 +54,18 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level}) 
           onSave({
             ...values,
             createDate: values.createDate || now,
-            updateDate: now,
+
           });
         })
         .catch((e) => {
           log.error(e);
         });
   }, [form, onSave]);
-
+  function roleChange(value:any,option:any) {
+    setRolesOption({
+      id: value, criterionName: option.children
+    })
+  }
   return (
       <Modal
           visible={visible}
@@ -67,6 +84,36 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level}) 
           <Form.Item
               label={t("name")}
               name="name"
+              rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+              label={t("standardType")}
+              name="standardType"
+              rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+              label={t("criterionName")}
+              name="criterion"
+              rules={[{ required: true }]}
+              valuePropName={"criterion"}
+          >
+            {
+              <Select value={rolesOption.id} onChange={roleChange} >
+                {
+                  codes.map(it =>{
+                    return (<Option key={it.id} value={it.id}>{it.criterionName}</Option>)}
+                  )
+                }
+              </Select>}
+          </Form.Item>
+
+          <Form.Item
+              label={t("cycle")}
+              name="cycle"
               rules={[{ required: true }]}
           >
             <Input />
