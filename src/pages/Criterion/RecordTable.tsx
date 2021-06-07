@@ -22,7 +22,7 @@ const RecordTable: FC<Props> = ({
           {
               title: t("traceDate"),
               dataIndex: "traceDate",
-              render:(v:string)=>dayjs(v).format(DateFormatString)
+              render:(v:string)=>v?dayjs(v).format(DateFormatString):""
           },{
               title: t("traceUnit"),
               dataIndex: "traceUnit",

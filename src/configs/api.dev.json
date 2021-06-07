@@ -1,7 +1,7 @@
 {
   "api": {
     "protocol": "http",
-    "ip": "localhost",
+    "ip": "192.168.31.146",
     "port": "9998",
     "prefix": ""
   },

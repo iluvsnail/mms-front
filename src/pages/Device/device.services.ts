@@ -49,6 +49,13 @@ export const asyncPutDevice = async (data: IDevice, cb: AsyncCallback) => {
   });
   callback(res, cb, data);
 };
+export const asyncPrintItem = async (data: IDevice, cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.device}/${data.id}`).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, data);
+};
 
 export const asyncDelDevice = async (data: IDevice, cb: AsyncCallback) => {
   const res = await YSAxios.delete(`${api.device}/${data.id}`).catch((e) => {

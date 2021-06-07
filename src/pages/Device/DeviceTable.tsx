@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import {FC, useMemo, useState} from "react";
 import { useTranslation } from "react-i18next";
 import YSTable from "../../components/YSTable";
-import { DateTimeFormatString } from "../../constants/strings";
+import {DateFormatString, DateTimeFormatString} from "../../constants/strings";
 import { Button, Popconfirm } from "antd";
 import {IsLock, LockList} from "../../models/dict";
 import {IRole} from "../../models/role";
@@ -70,6 +70,7 @@ const DeviceTable: FC<Props> = ({
             title: t("lastAuthenticationDate"),
             dataIndex: "lastAuthenticationDate",
             sorter: (a: IDevice, b: IDevice) => a.factoryNumber.localeCompare(b.factoryNumber),
+            render:(v:string)=>v?dayjs(v).format(DateFormatString):""
         },{
             title: t("dutyUnit"),
             dataIndex: "dutyUnit",

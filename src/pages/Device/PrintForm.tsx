@@ -52,7 +52,7 @@ const PrintForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
               style={{display:"block"}}
               width={"160px"}
               height={"160px"}
-              src={`${BASE_URL}/${api.device}/qrcode/${item?.id}` }
+              src={item?.base64 }
           />
         </div>
         <div style={{width:"55%",height:"160px","fontSize":"20px",display:"inline-block",paddingLeft:"10px"}}>

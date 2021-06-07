@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import {DateTimeFormatString} from "../../../constants/strings";
 import log from "loglevel";
 import BatchSendTable from "./BatchSendTable";
+import BatchUploadTable from "./BatchUploadTable";
 
 interface Props {
   visible: boolean;
@@ -101,7 +102,7 @@ const BatchUploadForm: FC<Props> = ({ visible, item, onSave, onCancel,datas }) =
           </Row>
 
         </Form>
-        <BatchSendTable data={datas}/>
+        <BatchUploadTable data={datas}/>
 
       </Modal>
   );

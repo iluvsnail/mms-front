@@ -46,11 +46,12 @@ const PrintForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
           maskClosable={false}
           forceRender
           title={"打印"}
+          width={820}
       >
       <div id="qrcode">
           {item?.ys?.map(ys=>{
             return (<>
-              <Image src={`${BASE_URL}/${api.task}/${item?.taskDevice}/ysData/${ys}`}></Image>
+              <img src={`${ys}`}></img>
             </>);
           })}
       </div>

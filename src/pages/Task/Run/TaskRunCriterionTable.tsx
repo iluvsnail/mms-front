@@ -5,6 +5,7 @@ import YSTable from "../../../components/YSTable";
 import {ICriterion} from "../../../models/criterion";
 import {ICodecriterion} from "../../../models/codecriterion";
 import {isAdmin} from "../../../utils/tokenUtils";
+import {DateFormatString} from "../../../constants/strings";
 
 interface Props {
   data: ICriterion[];
@@ -61,6 +62,7 @@ const TaskRunCriterionTable: FC<Props> = ({
               title: t("lastTracingDate"),
               dataIndex: "lastTracingDate",
               sorter: (a: ICriterion, b: ICriterion) => a.lastTracingDate.toString().localeCompare(b.lastTracingDate.toString()),
+              render:(v:string)=>v?dayjs(v).format(DateFormatString):""
           },
       ],
       [t]

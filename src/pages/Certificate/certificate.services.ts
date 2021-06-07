@@ -4,6 +4,7 @@ import { AsyncCallback } from "../../models/common";
 import YSAxios, { callback } from "../../utils/YSAxios";
 import {ICertificate} from "../../models/certificate";
 import {BASE_URL} from "../../utils/apiUtils";
+import {ICriterion} from "../../models/criterion";
 
 export const asyncGetCertificateData = async (cb: AsyncCallback, data?:Record<string, unknown>) => {
   const res = await YSAxios.post(api.certificateList,data).catch((e) => {
@@ -85,4 +86,11 @@ export const asyncExportCertificates =  (data: string[]) => {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+};
+export const asyncPrintItem = async (data: ICertificate, cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.certificate}/${data.id}`).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, data);
 };

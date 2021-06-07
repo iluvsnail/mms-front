@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState} from "react";
 import { StyledContainer } from "../../../components/StyledComponents";
 import {
-  asyncDelDeviceType, asyncDownloadTemplate,
+  asyncDelDeviceType, asyncDeviceType, asyncDownloadTemplate,
   asyncGetDeviceTypeData,
   asyncPutDeviceType,
 } from "./deviceType.services";
@@ -163,6 +163,17 @@ const DeviceType: FC = () => {
       }
     });
   }, []);
+  const refreshItem = useCallback((data: IDeviceType) => {
+    asyncDeviceType(data, (res) => {
+      if (res.isOk) {
+        setItem(res.data);
+        setList((prev) => prev.map(pre=>{
+          if(pre.id==res.data.id) return res.data;
+          return pre;
+        }));
+      }
+    });
+  }, []);
   const onSave = useCallback(
     (data: IDeviceType) => {
       setLoading(true);
@@ -234,11 +245,13 @@ const DeviceType: FC = () => {
       authorization: 'authorization-text',
     },
     withCredentials:true,
+    showUploadList:false,
     onChange(info:any) {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
+        if(item) refreshItem(item);
         message.success(`${info.file.name} 文件上传成功`);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败`);
@@ -292,15 +305,22 @@ const DeviceType: FC = () => {
               >
                 {item?.cycle}
               </Form.Item>
-              <Form.Item
-                  label={t("downloadTemplate")}
-              >
-                <Button onClick={() =>onDownloadTemplate()} title={t("downloadTemplate")} type="link" style={{cursor: "pointer" }}>
-                  {t("downloadTemplate")}
-                </Button>
-              </Form.Item>
-              <Form.Item label={t("preview")}></Form.Item>
+              {
+                item?.ys?(
+                    <>
+                    <Form.Item
+                        label={t("downloadTemplate")}
+                    >
+                      <Button onClick={() =>onDownloadTemplate()} title={t("downloadTemplate")} type="link" style={{cursor: "pointer" }}>
+                        {t("downloadTemplate")}
+                      </Button>
+                    </Form.Item>
+                    <Form.Item label={t("preview")}></Form.Item>
+                    </>
+                ):""
+              }
             </Form>
+
             <Divider></Divider>
             <Row>
               {item?.ys?.map(ys=>{

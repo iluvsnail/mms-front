@@ -19,24 +19,7 @@ const BatchSendTable: FC<Props> = ({
     data
 }) => {
   const { t } = useTranslation(["taskdevice","device","task","common", "dict"]);
-    const props = {
-        name: 'file',
-        accept:".xlsx",
-        headers: {
-            authorization: 'authorization-text',
-        },
-        withCredentials:true,
-        onChange(info:any) {
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} 文件上传成功`);
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} 文件上传失败`);
-            }
-        },
-    };
+
   const columns = useMemo(
       () => [
           {
@@ -57,20 +40,7 @@ const BatchSendTable: FC<Props> = ({
           },{
               title: t("receivedPerson"),
               dataIndex: "receivedPerson"
-          },{
-              title: t("common:operations"),
-              dataIndex: "OPERATIONS",
-              render: (v: unknown, r: ITaskDevice) => (
-                  <>
-
-                      <Upload action={`${BASE_URL}/${api.task}/device/upload/${r.id}`}  {...props}>
-                          <Button type="link"  title={t("upload")}>
-                              {t("uploadReport")}
-                          </Button>
-                      </Upload>
-                  </>
-              ),
-          },
+          }
       ],
       [t]
   );

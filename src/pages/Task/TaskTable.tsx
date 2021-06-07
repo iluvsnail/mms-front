@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import {FC, useMemo, useState} from "react";
 import { useTranslation } from "react-i18next";
 import YSTable from "../../components/YSTable";
-import { DateTimeFormatString } from "../../constants/strings";
+import {DateFormatString, DateTimeFormatString} from "../../constants/strings";
 import { Button, Popconfirm ,Progress} from "antd";
 import {IsLock, LockList} from "../../models/dict";
 import {IRole} from "../../models/role";
@@ -58,10 +58,12 @@ const TaskTable: FC<Props> = ({
             title: t("startDate"),
             dataIndex: "startDate",
             sorter: (a: ITask, b: ITask) => a.startDate.toString().localeCompare(b.startDate.toString()),
+        render:(v:string)=>v?dayjs(v).format(DateFormatString):""
         },{
             title: t("finishDate"),
             dataIndex: "finishDate",
             sorter: (a: ITask, b: ITask) => a.finishDate.toString().localeCompare(b.finishDate.toString()),
+            render:(v:string)=>v?dayjs(v).format(DateFormatString):""
         },{
             title: t("currentStatus"),
             dataIndex: "status",
@@ -126,15 +128,17 @@ const TaskTable: FC<Props> = ({
                 {t("common:delete")}
               </Button>
             </Popconfirm>
+                  {
+                      (r.instrumentCount >0 && r.receivedDeviceCount >0 && r.receivedDeviceCount== r.detectedDeviceCount && r.receivedDeviceCount == r.sentDeviceCount)?(<Button
+                          size="small"
+                          onClick={() => onFinish(r)}
+                          title={t("task:finish")}
+                          type="link"
+                      >
+                          {t("task:finish")}
+                      </Button>):""
+                  }
 
-              <Button
-                  size="small"
-                  onClick={() => onFinish(r)}
-                  title={t("task:finish")}
-                  type="link"
-              >
-                  {t("task:finish")}
-              </Button>
                       </>):""}
           </>
         ),

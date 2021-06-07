@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import {FC, useMemo, useState} from "react";
 import { useTranslation } from "react-i18next";
 import YSTable from "../../components/YSTable";
-import { DateTimeFormatString } from "../../constants/strings";
+import {DateFormatString, DateTimeFormatString} from "../../constants/strings";
 import { Button, Popconfirm } from "antd";
 import {IsLock, LockList} from "../../models/dict";
 import {IRole} from "../../models/role";
@@ -76,6 +76,7 @@ const CertificateTable: FC<Props> = ({
             title: t("validDate"),
             dataIndex: "validDate",
             sorter: (a: ICertificate, b: ICertificate) => a.validDate - b.validDate,
+            render:(v:string)=>v?dayjs(v).format(DateFormatString):""
         },{
             title: t("entrustUnit"),
             dataIndex: "entrustUnit",

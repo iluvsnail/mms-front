@@ -12,15 +12,13 @@ import {
   asyncLockUser,
   asyncResetPassword,
   asyncLockUsers,
-  asyncResetUsersPassword, asyncExportCertificates
+  asyncResetUsersPassword, asyncExportCertificates,asyncPrintItem
 } from "./certificate.services";
 import CertificateForm from "./CertificateForm";
 import { message } from "antd";
 import {ICertificate} from "../../models/certificate";
 import CertificateDetail from "./CertificateDetail";
-import {asyncExportCriterions} from "../Criterion/criterion.services";
 import PrintForm from "./PrintForm";
-import {IDevice} from "../../models/device";
 
 const Certificate: FC = () => {
   const [list, setList] = useState<ICertificate[]>([]);
@@ -211,8 +209,12 @@ const Certificate: FC = () => {
     asyncExportCertificates(its);
   }, []);
   const onPrint = useCallback((editItem: ICertificate) => {
-    setItem(editItem);
     setPrintVisible(true);
+    asyncPrintItem(editItem, (res) => {
+      if (res.isOk) {
+        setItem(res.data);
+      }
+    });
   }, []);
   const onPrintClose = useCallback(() => {
     setItem(undefined);

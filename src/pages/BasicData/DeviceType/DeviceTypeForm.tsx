@@ -88,6 +88,7 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
           >
             <Input />
           </Form.Item>
+          {level=="1"?(<>
           <Form.Item
               label={t("standardType")}
               name="standardType"
@@ -117,7 +118,7 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
               rules={[{ required: true }]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item></>):""}
           <div style={{ display: "none" }}>
             <Form.Item label="id" name="id">
               <Input />

@@ -30,6 +30,8 @@ interface Props<RecordType = any> extends TableProps<RecordType> {
   onCodeChange?:(v:string)=>void;
   onSearch?:(v:string)=>void;
   onShowAdded?:(v:boolean)=>void;
+  onShowDetected?:(v:boolean)=>void;
+  onShowSend?:(v:boolean)=>void;
   its?:string[];
   tableTitle?: string;
   onAdd?: () => void; // 设置之后展示新建按钮
@@ -65,6 +67,8 @@ const YSTable: FC<Props> = ({
     onCodeChange,
     onSearch,
                               onShowAdded,
+    onShowDetected,
+    onShowSend,
     its,
   tableTitle,
   onAdd,
@@ -159,7 +163,17 @@ const codesRadio=codes?.map(v => {
           ):null }
           {
             onShowAdded?(
-                <Checkbox onChange={(e)=>{onShowAdded(e.target.checked)}}>{t("onShowAdded")}</Checkbox>
+                <Checkbox onChange={(e)=>{onShowAdded(e.target.checked)}}>{"仅显示已接收设备"}</Checkbox>
+            ):null
+          }
+          {
+            onShowDetected?(
+                <Checkbox onChange={(e)=>{onShowDetected(e.target.checked)}}>{"仅显示已检定设备"}</Checkbox>
+            ):null
+          }
+          {
+            onShowSend?(
+                <Checkbox onChange={(e)=>{onShowSend(e.target.checked)}}>{"仅显示已发放设备"}</Checkbox>
             ):null
           }
         </div>

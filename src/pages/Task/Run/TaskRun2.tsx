@@ -9,7 +9,7 @@ import {
   asyncGetSelectedData,
   asyncPutTaskDevice,
   asyncDownloadTemplate,
-  asyncBatchReceiveTaskDevice, asyncBatchSendTaskDevice, asyncBatchUploadTaskDevice
+  asyncBatchReceiveTaskDevice, asyncBatchSendTaskDevice, asyncBatchUploadTaskDevice, asyncFkPrintItem
 } from "./taskrun.services";
 import {Button, Col, Divider, message, Row, Tabs, Form, Input, Select} from "antd";
 import {ITask} from "../../../models/task";
@@ -211,6 +211,12 @@ const TaskRun2: FC = () => {
       if (deviceParams.showAdded) {
         result = result.filter(r => r.status == "1" || r.status == "2"|| r.status == "3"|| r.status == "4"|| r.status == "5");
       }
+      if (deviceParams.showDetected) {
+        result = result.filter(r => r.status == "2"|| r.status == "3"|| r.status == "4"|| r.status == "5");
+      }
+      if (deviceParams.showSend) {
+        result = result.filter(r => r.status == "3"|| r.status == "4"|| r.status == "5");
+      }
       return result;
     }
     return taskDeviceList;
@@ -227,6 +233,12 @@ const TaskRun2: FC = () => {
   }
   const onShowAdded = (v:boolean)=>{
     setDeviceParams({"showAdded":v})
+  }
+  const onShowDetected = (v:boolean)=>{
+    setDeviceParams({"showDetected":v})
+  }
+  const onShowSend = (v:boolean)=>{
+    setDeviceParams({"showSend":v})
   }
   const setSelectedRows=(its:string[])=>{
     setSelected(its)
@@ -586,8 +598,13 @@ const TaskRun2: FC = () => {
     setScanFormVisible(true);
   }, []);
   const onPrint = useCallback((editItem: ITaskDevice) => {
-    setPrintItem(editItem);
+
     setPrintVisible(true);
+    asyncFkPrintItem(editItem, (res) => {
+      if (res.isOk) {
+        setPrintItem(res.data);
+      }
+    });
   }, []);
   const onPrintClose = useCallback(() => {
     setPrintItem(undefined);
@@ -698,6 +715,16 @@ const TaskRun2: FC = () => {
                   onCodeChange={onCodeChange}
                   onSearch={onSearch}
               />
+              <Divider></Divider>
+              {
+                isAdmin()?(
+                    <Row >
+                      <Col span={2} offset={10}><Button onClick={() => {
+                        onOk()
+                      }} title={t("save")}>
+                        {t("save")}
+                      </Button></Col>
+                    </Row>):""}
             </TabPane>
             <TabPane tab={t("received")} key="2">
               <TaskRunDeviceTable
@@ -720,7 +747,7 @@ const TaskRun2: FC = () => {
                   its={selectedDeviceRows}
                   loading={loading}
                   setSelectedRows={setDeviceSelected}
-                  onShowAdded={onShowAdded}
+                  onShowDetected={onShowDetected}
                   onBatchRevoke={onBatchRevoke}
                   onRevoke = {onRevoke}
                   onDownloadTemplate={onDownloadTemplate}
@@ -736,7 +763,7 @@ const TaskRun2: FC = () => {
                   its={selectedDeviceRows}
                   loading={loading}
                   setSelectedRows={setDeviceSelected}
-                  onShowAdded={onShowAdded}
+                  onshowSend={onShowSend}
                   onBatchRevoke={onBatchRevoke}
                   onRevoke = {onRevoke}
                   onSend = {onSend}
@@ -745,20 +772,6 @@ const TaskRun2: FC = () => {
               />
             </TabPane>
           </Tabs>
-          <Divider></Divider>
-          {
-          isAdmin()?(
-          <Row >
-            <Col span={2} offset={9}><Button type="primary" onClick={()=>
-              onFinish(item)} title={t("finish")}>
-              {t("finish")}
-            </Button></Col>
-            <Col span={2}><Button onClick={() => {
-              onOk()
-            }} title={t("save")}>
-              {t("save")}
-            </Button></Col>
-          </Row>):""}
           <ReceiveForm  item={receivedItem} visible={formVisible} onSave={onSaveReceive} onCancel={onReceiveClose}></ReceiveForm>
           <SendForm  item={sendItem} visible={sendFormVisible} onSave={onSaveSend} onCancel={onSendClose}></SendForm>
           <SendForm  item={editItem} visible={sendEditVisible} onSave={onSaveSendEdit} onCancel={onSendEditClose}></SendForm>

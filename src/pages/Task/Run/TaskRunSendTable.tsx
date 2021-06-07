@@ -8,13 +8,14 @@ import {IDevice} from "../../../models/device";
 import {ITaskDevice} from "../../../models/taskdevice";
 import {ITask} from "../../../models/task";
 import {Button, message, Popconfirm} from "antd";
+import {DateFormatString} from "../../../constants/strings";
 
 interface Props {
   data: ITaskDevice[];
   its:string[];
   loading: boolean;
   setSelectedRows:(its:string[])=>void;
-    onShowAdded?:(v:boolean)=>void;
+    onshowSend?:(v:boolean)=>void;
     onBatchReceived?:(its:string[])=>void;
     onBatchRevoke?:(its:string[])=>void;
     onBatchSend?:(its:string[])=>void;
@@ -29,7 +30,7 @@ const TaskRunSendTable: FC<Props> = ({
     its,
     loading,
     setSelectedRows,
-    onShowAdded,
+                                         onshowSend,
     onScan,
     onBatchRevoke,
     onBatchReceived,
@@ -63,6 +64,7 @@ const TaskRunSendTable: FC<Props> = ({
               title: t("detectedDate"),
               dataIndex: "detectedDate",
               sorter: (a: ITaskDevice, b: ITaskDevice) => a.detectedDate.toString().localeCompare(b.detectedDate.toString()),
+              render:(v:string)=>v?dayjs(v).format(DateFormatString):""
           },{
               title: t("detectedPerson"),
               dataIndex: "detectedPerson",
@@ -71,6 +73,7 @@ const TaskRunSendTable: FC<Props> = ({
               title: t("sendDate"),
               dataIndex: "sendDate",
               sorter: (a: ITaskDevice, b: ITaskDevice) => a.sendDate.toString().localeCompare(b.sendDate.toString()),
+              render:(v:string)=>v?dayjs(v).format(DateFormatString):""
           },{
               title: t("sendPerson"),
               dataIndex: "sendPerson",
@@ -134,7 +137,7 @@ const TaskRunSendTable: FC<Props> = ({
       }}
       columns={columns}
       its={its}
-      onShowAdded={onShowAdded}
+      onShowSend={onshowSend}
       onScan={onScan}
       onBatchReceived={onBatchReceived}
       onBatchRevoke={onBatchRevoke}

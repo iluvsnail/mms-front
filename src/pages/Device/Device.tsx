@@ -9,7 +9,7 @@ import {
   asyncPutDevice,
   asyncGetCodeData,
   asyncDelDevices,
-  asyncGetDeviceCodeData, asyncGetInstitutionCodeData, asyncGetDeviceRecord, asyncExportDevices
+  asyncGetDeviceCodeData, asyncGetInstitutionCodeData, asyncGetDeviceRecord, asyncExportDevices, asyncPrintItem
 } from "./device.services";
 import DeviceForm from "./DeviceForm";
 import { message } from "antd";
@@ -88,8 +88,12 @@ const Device: FC = () => {
     setFormVisible(true);
   }, []);
   const onPrint = useCallback((editItem: IDevice) => {
-    setItem(editItem);
-    setPrintVisible(true);
+    asyncPrintItem(editItem, (res) => {
+      if (res.isOk) {
+        setItem(res.data);
+        setPrintVisible(true);
+      }
+    });
   }, []);
   const onTodo = useCallback((editItem: IDevice) => {
     message.warn("待实现！");

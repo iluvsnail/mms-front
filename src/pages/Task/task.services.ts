@@ -4,6 +4,8 @@ import { AsyncCallback } from "../../models/common";
 import YSAxios, { callback } from "../../utils/YSAxios";
 import {ITask} from "../../models/task";
 import {BASE_URL} from "../../utils/apiUtils";
+import {ICertificate} from "../../models/certificate";
+import {ITaskDevice} from "../../models/taskdevice";
 
 export const asyncGetTaskData = async (cb: AsyncCallback, data?:Record<string, unknown>) => {
   const res = await YSAxios.post(api.taskList,data).catch((e) => {

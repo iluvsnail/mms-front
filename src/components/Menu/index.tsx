@@ -9,7 +9,7 @@ import {getToken, isAdmin} from "../../utils/tokenUtils";
 
 const StyledMenu = styled.div`
   width: 15rem;
-  height: 100%;
+  height: 95%;
   border-right: 1px solid #f0f0f0;
   margin: 2rem 0;
 `;
@@ -63,7 +63,7 @@ const Menu: FC<RouteComponentProps> = ({ location }) => {
 
   return (
     <StyledMenu>
-      <AntdMenu mode="inline" selectedKeys={[activity]}>
+      <AntdMenu mode="inline" selectedKeys={[activity]} style={{height:"100%",overflowY:"auto",overflowX:"hidden"}}>
         {menus}
       </AntdMenu>
     </StyledMenu>

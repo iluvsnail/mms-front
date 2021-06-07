@@ -5,13 +5,14 @@ import YSTable from "../../../components/YSTable";
 import {IDevice} from "../../../models/device";
 import {ITaskDevice} from "../../../models/taskdevice";
 import {Button, message, Popconfirm} from "antd";
+import {DateFormatString} from "../../../constants/strings";
 
 interface Props {
   data: ITaskDevice[];
   its:string[];
   loading: boolean;
   setSelectedRows:(its:string[])=>void;
-    onShowAdded?:(v:boolean)=>void;
+    onShowDetected?:(v:boolean)=>void;
     onBatchReceived?:(its:string[])=>void;
     onBatchRevoke?:(its:string[])=>void;
     onScan?:()=>void;
@@ -27,7 +28,7 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
     its,
     loading,
     setSelectedRows,
-    onShowAdded,
+                                                   onShowDetected,
     onScan,
     onBatchRevoke,
     onBatchReceived,
@@ -62,6 +63,7 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
               title: t("receivedDate"),
               dataIndex: "receivedDate",
               sorter: (a: ITaskDevice, b: ITaskDevice) => a.receivedDate.toString().localeCompare(b.receivedDate.toString()),
+              render:(v:string)=>v?dayjs(v).format(DateFormatString):""
           },{
               title: t("sendDetectedPerson"),
               dataIndex: "sendDetectedPerson",
@@ -74,6 +76,7 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
               title: t("detectedDate"),
               dataIndex: "detectedDate",
               sorter: (a: ITaskDevice, b: ITaskDevice) => a.detectedDate.toString().localeCompare(b.detectedDate.toString()),
+              render:(v:string)=>v?dayjs(v).format(DateFormatString):""
           },{
               title: t("detectedPerson"),
               dataIndex: "detectedPerson",
@@ -148,7 +151,7 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
       }}
       columns={columns}
       its={its}
-      onShowAdded={onShowAdded}
+      onShowDetected={onShowDetected}
       onScan={onScan}
       onBatchReceived={onBatchReceived}
       onBatchRevoke={onBatchRevoke}

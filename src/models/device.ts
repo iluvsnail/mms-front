@@ -23,4 +23,5 @@ export interface IDevice {
   deviceType:string;
   institution:string;
   offset:number;
+  base64?:string;
 }

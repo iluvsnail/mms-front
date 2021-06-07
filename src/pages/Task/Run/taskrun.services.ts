@@ -123,3 +123,10 @@ export const asyncDownloadTemplate =  (itm:ITaskDevice) => {
     link.click();
     document.body.removeChild(link);
 };
+export const asyncFkPrintItem = async (data: ITaskDevice, cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.task}/img/${data.id}`).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, data);
+};

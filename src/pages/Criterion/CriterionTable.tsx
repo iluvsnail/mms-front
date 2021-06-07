@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import {FC, useMemo, useState} from "react";
 import { useTranslation } from "react-i18next";
 import YSTable from "../../components/YSTable";
-import { DateTimeFormatString } from "../../constants/strings";
+import {DateFormatString, DateTimeFormatString} from "../../constants/strings";
 import { Button, Popconfirm } from "antd";
 import {IsLock, LockList} from "../../models/dict";
 import {IRole} from "../../models/role";
@@ -80,6 +80,7 @@ const CriterionTable: FC<Props> = ({
             title: t("lastTracingDate"),
             dataIndex: "lastTracingDate",
             sorter: (a: ICriterion, b: ICriterion) => a.lastTracingDate.toString().localeCompare(b.lastTracingDate.toString()),
+            render:(v:string)=>v?dayjs(v).format(DateFormatString):""
         },
       {
         title: t("common:operations"),

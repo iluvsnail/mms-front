@@ -8,6 +8,7 @@ import {IDevice} from "../../../models/device";
 import {ITaskDevice} from "../../../models/taskdevice";
 import {ITask} from "../../../models/task";
 import {Button, message, Popconfirm} from "antd";
+import {DateFormatString} from "../../../constants/strings";
 
 interface Props {
   data: ITaskDevice[];
@@ -60,6 +61,7 @@ const TaskRunDeviceTable: FC<Props> = ({
               title: t("receivedDate"),
               dataIndex: "receivedDate",
               sorter: (a: ITaskDevice, b: ITaskDevice) => a.receivedDate.toString().localeCompare(b.receivedDate.toString()),
+              render:(v:string)=>v?dayjs(v).format(DateFormatString):""
           },{
               title: t("sendDetectedPerson"),
               dataIndex: "sendDetectedPerson",

@@ -29,7 +29,7 @@ export const asyncPostDemo = async (data: ICriterion, cb: AsyncCallback) => {
 };
 
 export const asyncPutDeviceType = async (data: IDeviceType, cb: AsyncCallback) => {
-  if(!data.criterion.id)data.criterion={criterionName: "", id: String(data.criterion)}
+  if(data.criterion && !data.criterion.id) data.criterion={criterionName: "", id: String(data.criterion)}
   const res = await YSAxios.put(`${api.deviceType}`, data).catch((e) => {
     message.error(e.message);
     return e;
@@ -44,6 +44,15 @@ export const asyncDelDeviceType = async (data: IDeviceType, cb: AsyncCallback) =
   });
   callback(res, cb);
 };
+
+export const asyncDeviceType = async (data: IDeviceType, cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.deviceType}/${data.id}`).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb);
+};
+
 export const asyncResetPassword = async (data: ICriterion, cb: AsyncCallback) => {
   const res = await YSAxios.delete(`${api.user}/resetPassword/${data.id}`).catch((e) => {
     message.error(e.message);

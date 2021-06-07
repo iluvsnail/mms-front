@@ -31,10 +31,8 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
 
   const afterClose = useCallback(() => {
     form.resetFields();
-    //清空文件
-    setFileList([])
 
-  }, [form,fileList]);
+  }, [form]);
 
   const onOk = useCallback(() => {
     form
@@ -66,6 +64,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
     headers: {
       authorization: 'authorization-text',
     },
+    showUploadList:false,
     withCredentials:true,
     onChange(info:any) {
       if (info.file.status !== 'uploading') {
@@ -132,7 +131,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
           <Form.Item
               label={t("report")}
           >
-            <Upload fileList={fileList} {...props}>
+            <Upload {...props}>
               <Button type="primary"  title={t("upload")}>
                 {t("uploadReport")}
               </Button>

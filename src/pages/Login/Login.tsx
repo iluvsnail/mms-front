@@ -29,10 +29,15 @@ useEffect(()=>{
     asyncLogin(data, (res) => {
       if (res.isOk) {
         if(res.data){
-          //设置权限
-          setToken(res.data.role.name+".1.2");
-          setItem("user", res.data);
-          history.push("/device/list")
+          if("当前用户被锁定，请联系管理员！" == res.data.position){
+            message.info(res.data.position);
+          }else{
+            //设置权限
+            setToken(res.data.role.name+".1.2");
+            setItem("user", res.data);
+            history.push("/device/list")
+
+          }
         }else{
           message.info("用户名或密码错误！")
         }
