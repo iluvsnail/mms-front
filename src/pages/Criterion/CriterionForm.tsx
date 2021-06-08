@@ -187,7 +187,7 @@ const CriterionForm: FC<Props> = ({ visible, item, onSave, onCancel ,codes,insti
             <DatePicker  showTime ></DatePicker>
           </Form.Item>
           <Form.Item
-              label={"末次溯源"+t("certificateNumber")}
+              label={t("certificateNumber")}
               name="certificateNumber"
           >
             <Input />

@@ -27,7 +27,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
       if(item.validDate) item.validDate = dayjs(item.validDate);
       form.setFieldsValue(item);
     }
-  }, [visible, item, form,fileList]);
+  }, [visible, item, form]);
 
   const afterClose = useCallback(() => {
     form.resetFields();
@@ -75,7 +75,6 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败`);
       }
-      setFileList(info.fileList)
     },
   };
 

@@ -5,7 +5,7 @@
   "deviceName": "设备名称",
   "standardType": "规格型号",
   "factoryNumber": "出厂编号",
-  "certificateNumber": "证书和报告编号",
+  "certificateNumber": "证书编号",
   "entrustUnit": "委托单位",
   "verifier": "检定员",
   "createDate": "创建日期",

@@ -3,7 +3,7 @@
     "title": "检定设备列表"
   },
   "deviceName": "设备名称",
-  "criterionName": "标准名称",
+  "criterionName": "检定标准",
   "factoryNumber": "出厂编号",
   "lastAuthenticationDate": "末次检定时间",
   "createDate": "创建日期",

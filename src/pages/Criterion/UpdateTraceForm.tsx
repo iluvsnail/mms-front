@@ -72,7 +72,7 @@ const UpdateTraceForm: FC<Props> = ({ visible, item, onSave, onCancel,datas,its 
     name: 'file',
     action:'',
     listType: "picture" as UploadListType,
-    accept:".png,.jpg",
+    accept:".png,.jpg,.jpeg",
     headers: {
       authorization: 'authorization-text',
     },

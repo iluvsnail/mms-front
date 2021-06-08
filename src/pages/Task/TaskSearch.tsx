@@ -35,7 +35,6 @@ const TaskSearch: FC<Props> = ({ onSearch ,codes}) => {
                     ),
                 },
                 { name: "dutyPerson", label: t("dutyPerson") },
-                { name: "createUser", label: t("createUser") },
                 { name: "startDate", label: t("startDate") },
                 { name: "finishDate", label: t("finishDate") },
             ]}

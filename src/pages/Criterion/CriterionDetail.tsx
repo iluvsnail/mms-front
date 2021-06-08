@@ -113,7 +113,7 @@ const CriterionDetail: FC<Props> = ({ visible, item, onSave,onCancel}) => {
             {item?.lastTracingDate}
           </Form.Item>
           <Form.Item
-              label={"末次溯源"+t("certificateNumber")}
+              label={t("certificateNumber")}
               name="certificateNumber"
           >
             {item?.certificateNumber}

@@ -264,13 +264,14 @@ const TaskRun: FC = () => {
           //保存标准仪器
           asyncSaveCriterions(selectedRows,data.id,(res)=>{
             if (res.isOk) {
+              if(item) item.instrumentCount = selectedDeviceRows.length
               message.success("保存成功");
             }
           });
         });
 
       },
-      [selectedRows]
+      [selectedRows,item]
   );
   const onOk = useCallback(() => {
     form
@@ -301,6 +302,10 @@ const TaskRun: FC = () => {
         asyncPutTaskDevice(data, (res) => {
           setLoading(false);
           if (res.isOk) {
+            if(item){
+              item.receivedDeviceCount=item.receivedDeviceCount+1;
+              setItem(item)
+            }
             setTaskDeviceList((prev) =>
                 prev.map((p) => {
                   if (p.device.id === data.device.id) {
@@ -314,7 +319,7 @@ const TaskRun: FC = () => {
           }
         });
       },
-      [onReceiveClose]
+      [onReceiveClose,item]
   );
   const onScanClose = useCallback(() => {
     setScanItem(undefined);
@@ -443,6 +448,11 @@ const TaskRun: FC = () => {
         asyncPutTaskDevice(data, (res) => {
           setLoading(false);
           if (res.isOk) {
+
+            if(item){
+              item.sentDeviceCount=item.sentDeviceCount+1;
+              setItem(item)
+            }
             setTaskDeviceList((prev) =>
                 prev.map((p) => {
                   if (p.device.factoryNumber == data.device.factoryNumber) {
@@ -456,7 +466,7 @@ const TaskRun: FC = () => {
           }
         });
       },
-      [onSendClose]
+      [onSendClose,item]
   );
   const onSaveSendEdit = useCallback(
       (data: ITaskDevice) => {
@@ -499,6 +509,10 @@ const TaskRun: FC = () => {
         data.status="2";
         asyncPutTaskDevice(data, (res) => {
           setLoading(false);
+          if(item){
+            item.detectedDeviceCount=item.detectedDeviceCount+1;
+            setItem(item)
+          }
           if (res.isOk) {
             setTaskDeviceList((prev) =>
                 prev.map((p) => {
@@ -513,7 +527,7 @@ const TaskRun: FC = () => {
           }
         });
       },
-      [onUploadClose]
+      [onUploadClose,item]
   );
   const onUpload = useCallback((editItem: ITaskDevice) => {
     setUploadItem(editItem)
@@ -700,6 +714,13 @@ const TaskRun: FC = () => {
                       }} title={t("save")}>
                         {t("save")}
                       </Button></Col>
+                      {
+                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(<Col span={2}><Button onClick={() => {
+                              if(item)onFinish(item)
+                            }} title={t("finish")}>
+                              {t("finish")}
+                            </Button></Col>):""
+                      }
                     </Row>):""}
             </TabPane>
             <TabPane tab={t("received")} key="2">
@@ -715,6 +736,19 @@ const TaskRun: FC = () => {
                   onReceived={onReceived}
                   onRevoke = {onRevoke}
               />
+              <Divider></Divider>
+              {
+                isAdmin()?(
+                    <Row >
+                      {
+                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
+                            <Col span={2} offset={10}><Button onClick={() => {
+                          if(item)onFinish(item)
+                        }} title={t("finish")}>
+                          {t("finish")}
+                        </Button></Col>):""
+                      }
+                    </Row>):""}
             </TabPane>
             <TabPane tab={t("detected")} key="3">
 
@@ -730,7 +764,19 @@ const TaskRun: FC = () => {
                   onUpload = {onUpload}
                   onBatchUploadReport={onBatchUploadReport}
                   onPrint={onPrint}
-              />
+              /><Divider></Divider>
+              {
+                isAdmin()?(
+                    <Row >
+                      {
+                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
+                            <Col span={2} offset={10}><Button onClick={() => {
+                              if(item)onFinish(item)
+                            }} title={t("finish")}>
+                              {t("finish")}
+                            </Button></Col>):""
+                      }
+                    </Row>):""}
             </TabPane>
             <TabPane tab={t("sent")} key="4">
 
@@ -745,7 +791,19 @@ const TaskRun: FC = () => {
                   onSend = {onSend}
                   onEdit={onEdit}
                   onBatchSend={onBatchSend}
-              />
+              /><Divider></Divider>
+              {
+                isAdmin()?(
+                    <Row >
+                      {
+                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
+                            <Col span={2} offset={10}><Button onClick={() => {
+                              if(item)onFinish(item)
+                            }} title={t("finish")}>
+                              {t("finish")}
+                            </Button></Col>):""
+                      }
+                    </Row>):""}
             </TabPane>
           </Tabs>
           <ReceiveForm  item={receivedItem} visible={formVisible} onSave={onSaveReceive} onCancel={onReceiveClose}></ReceiveForm>

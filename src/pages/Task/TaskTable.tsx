@@ -74,10 +74,6 @@ const TaskTable: FC<Props> = ({
             dataIndex: "dutyPerson",
             sorter: (a: ITask, b: ITask) => a.dutyPerson.localeCompare(b.dutyPerson),
         },{
-            title: t("createUser"),
-            dataIndex: "createUser",
-            sorter: (a: ITask, b: ITask) => a.createUser.localeCompare(b.createUser),
-        },{
             title: t("progress"),
             render:(v:unknown,r:ITask)=>(
                 <>

@@ -94,7 +94,6 @@ const InstitutionForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level})
           <Form.Item
               label={t("notes")}
               name="notes"
-              rules={[{ required: true }]}
           >
             <Input />
           </Form.Item>
