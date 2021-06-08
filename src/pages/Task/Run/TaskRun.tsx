@@ -516,7 +516,7 @@ const TaskRun: FC = () => {
           if (res.isOk) {
             setTaskDeviceList((prev) =>
                 prev.map((p) => {
-                  if (p.device.id === data.device.id) {
+                  if (p.device.id == data.device.id) {
                     return res.data;
                   }
                   return p;

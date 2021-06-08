@@ -99,14 +99,15 @@ const TaskTable: FC<Props> = ({
               >
                   {t("task:enterTask")}
               </Button>
-              <Button
+              {isAdmin()?(<Button
                   size="small"
                   onClick={() => onEdit(r)}
                   title={t("common:edit")}
                   type="link"
               >
                   {t("common:edit")}
-              </Button>
+              </Button>):""}
+
               {<Button
                   size="small"
                   onClick={() => onDetail(r)}
