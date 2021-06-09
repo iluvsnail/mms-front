@@ -21,6 +21,8 @@ interface Props {
     onScan?:()=>void;
     onReceived:(item:ITaskDevice)=>void;
     onRevoke:(item:ITaskDevice)=>void;
+    task?:ITask;
+    onDetail: (item: ITaskDevice)=>void;
 }
 
 const TaskRunDeviceTable: FC<Props> = ({
@@ -33,7 +35,8 @@ const TaskRunDeviceTable: FC<Props> = ({
     onBatchRevoke,
     onBatchReceived,
     onRevoke,
-                                           onReceived
+                                           onReceived,
+    task,onDetail
 }) => {
   const { t } = useTranslation(["taskdevice","device","task","common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -76,7 +79,15 @@ const TaskRunDeviceTable: FC<Props> = ({
               dataIndex: "OPERATIONS",
               render: (v: unknown, r: ITaskDevice) => (
                   <>
-                      {r.status=='1' ||r.status=='2' ||r.status=='3' ?(<Button
+                      <Button
+                          size="small"
+                          onClick={() =>onDetail(r)}
+                          title={t("common:detail")}
+                          type="link"
+                      >
+                          {t("common:detail")}
+                      </Button>
+                      {((r.status=='1' ||r.status=='2' ||r.status=='3' )&& task?.status=='1') ?(<Button
                           size="small"
                           onClick={() =>onReceived(r)}
                           title={t("common:edit")}

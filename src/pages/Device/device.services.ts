@@ -4,6 +4,8 @@ import { AsyncCallback } from "../../models/common";
 import YSAxios, { callback } from "../../utils/YSAxios";
 import {IDevice} from "../../models/device";
 import {BASE_URL} from "../../utils/apiUtils";
+import {ICertificate} from "../../models/certificate";
+import {ITaskDevice} from "../../models/taskdevice";
 
 export const asyncGetDeviceData = async (cb: AsyncCallback, data?:Record<string, unknown>) => {
   const res = await YSAxios.post(api.deviceList,data).catch((e) => {
@@ -122,4 +124,12 @@ export const asyncGetAlarmData = async (cb: AsyncCallback, data?:Record<string, 
     return e;
   });
   callback(res, cb, []);
+};
+
+export const asyncPrintTaskDevice = async (data: ITaskDevice, cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.device}/taskdevice/${data.id}`).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, data);
 };

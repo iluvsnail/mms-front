@@ -35,6 +35,7 @@ import BatchUploadForm from "./BatchUploadForm";
 import {ICertificate} from "../../../models/certificate";
 import PrintForm from "./PrintForm";
 import {isAdmin} from "../../../utils/tokenUtils";
+import DetailForm from "./DetailForm";
 
 const TaskRun: FC = () => {
   const [criterionList, setCriterionList] = useState<ICriterion[]>([]);
@@ -48,6 +49,7 @@ const TaskRun: FC = () => {
   const [uploadFormVisible, setUploadFormVisible] = useState(false);
   const [scanFormVisible, setScanFormVisible] = useState(false);
   const [printVisible, setPrintVisible] = useState(false);
+  const [detailVisible, setDetailVisible] = useState(false);
 
 
   const [batchReceiveFormVisible, setBatchReceiveFormVisible] = useState(false);
@@ -67,6 +69,7 @@ const TaskRun: FC = () => {
   const [editItem, setEditItem] = useState<ITaskDevice>();
   const [uploadItem, setUploadItem] = useState<ITaskDevice>();
   const [printItem, setPrintItem] = useState<ITaskDevice>();
+  const [detailItem, setDetailItem] = useState<ITaskDevice>();
   const [params, setParams] = useState<Record<string, unknown>>();
   const [deviceParams, setDeviceParams] = useState<Record<string, unknown>>();
   const [form] = Form.useForm();
@@ -497,6 +500,20 @@ const TaskRun: FC = () => {
     setEditItem(editItem);
     setSendEditFormVisible(true);
   }, []);
+  const onDetailClose = useCallback(() => {
+    setDetailItem(undefined);
+    setDetailVisible(false);
+  }, []);
+  const onDetail = useCallback((editItem: ITaskDevice) => {
+    setDetailItem(editItem);
+    setDetailVisible(true);
+  }, []);
+  const onSaveDetail = useCallback(
+      () => {
+        onDetailClose()
+      },
+      [onDetailClose]
+  );
   //uploadReport
   const onUploadClose = useCallback(() => {
     setUploadItem(undefined);
@@ -707,7 +724,7 @@ const TaskRun: FC = () => {
               />
               <Divider></Divider>
               {
-                isAdmin()?(
+                (isAdmin() && item?.status =='1')?(
                     <Row >
                       <Col span={2} offset={10}><Button onClick={() => {
                         onOk()
@@ -715,7 +732,7 @@ const TaskRun: FC = () => {
                         {t("save")}
                       </Button></Col>
                       {
-                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(<Col span={2}><Button onClick={() => {
+                        (item && item.status == '1' && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(<Col span={2}><Button onClick={() => {
                               if(item)onFinish(item)
                             }} title={t("finish")}>
                               {t("finish")}
@@ -735,13 +752,15 @@ const TaskRun: FC = () => {
                   onBatchRevoke={onBatchRevoke}
                   onReceived={onReceived}
                   onRevoke = {onRevoke}
+                  task={item}
+                  onDetail={onDetail}
               />
               <Divider></Divider>
               {
-                isAdmin()?(
+                (isAdmin())?(
                     <Row >
                       {
-                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
+                        (item&& item.status == '1'  && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
                             <Col span={2} offset={10}><Button onClick={() => {
                           if(item)onFinish(item)
                         }} title={t("finish")}>
@@ -764,12 +783,14 @@ const TaskRun: FC = () => {
                   onUpload = {onUpload}
                   onBatchUploadReport={onBatchUploadReport}
                   onPrint={onPrint}
+                  task={item}
+                  onDetail={onDetail}
               /><Divider></Divider>
               {
                 isAdmin()?(
                     <Row >
                       {
-                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
+                        (item&& item.status == '1'  && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
                             <Col span={2} offset={10}><Button onClick={() => {
                               if(item)onFinish(item)
                             }} title={t("finish")}>
@@ -791,12 +812,14 @@ const TaskRun: FC = () => {
                   onSend = {onSend}
                   onEdit={onEdit}
                   onBatchSend={onBatchSend}
+                  task={item}
+                  onDetail={onDetail}
               /><Divider></Divider>
               {
                 isAdmin()?(
                     <Row >
                       {
-                        (item && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
+                        (item&& item.status == '1'  && item.instrumentCount >0 && item.receivedDeviceCount >0 && item.receivedDeviceCount== item.detectedDeviceCount && item.receivedDeviceCount == item.sentDeviceCount)?(
                             <Col span={2} offset={10}><Button onClick={() => {
                               if(item)onFinish(item)
                             }} title={t("finish")}>
@@ -815,6 +838,7 @@ const TaskRun: FC = () => {
           <BatchSendForm visible={batchSendFormVisible} onSave={onBatchSendSave} onCancel={onBatchSendClose} datas={batchSendTaskDeviceList}/>
           <BatchUploadForm visible={batchUploadFormVisible} onSave={onBatchUploadSave} onCancel={onBatchUploadClose} datas={batchUploadTaskDeviceList}/>
           <PrintForm item={printItem} visible={printVisible} onSave={onPrintSave} onCancel={onPrintClose}/>
+          <DetailForm item={detailItem} visible={detailVisible} onSave={onSaveDetail} onCancel={onDetailClose} />
           </>
       </StyledContainer>
   );

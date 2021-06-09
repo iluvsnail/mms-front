@@ -52,7 +52,7 @@ const RecordPrintForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
       <div id="qrcode" style={{textAlign:"center"}}>
           {item?.ys?.map(ys=>{
             return (<>
-              <Image src={`${BASE_URL}/${api.task}/${item?.id}/ysData/${ys}`}></Image>
+              <Image src={`${ys}`}></Image>
             </>);
           })}
       </div>

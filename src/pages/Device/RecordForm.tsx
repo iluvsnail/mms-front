@@ -14,6 +14,8 @@ import RecordTable from "./RecordTable";
 import {ITaskDevice} from "../../models/taskdevice";
 import RecordPrintForm from "./RecordPrintForm";
 import {ICertificate} from "../../models/certificate";
+import {asyncPrintItem} from "../Certificate/certificate.services";
+import {asyncPrintTaskDevice} from "./device.services";
 
 interface Props {
   visible: boolean;
@@ -45,8 +47,12 @@ const RecordForm: FC<Props> = ({ visible, item, onSave, onCancel,datas }) => {
     onSave();
   }, [form, onSave]);
   const onPrint = useCallback((editItem: ITaskDevice) => {
-    setItem(editItem);
     setPrintVisible(true);
+    asyncPrintTaskDevice(editItem, (res) => {
+      if (res.isOk) {
+        setItem(res.data);
+      }
+    });
   }, []);
   const onPrintClose = useCallback(() => {
     setItem(undefined);

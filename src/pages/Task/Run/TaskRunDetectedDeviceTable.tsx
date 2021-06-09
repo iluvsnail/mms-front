@@ -6,6 +6,7 @@ import {IDevice} from "../../../models/device";
 import {ITaskDevice} from "../../../models/taskdevice";
 import {Button, message, Popconfirm} from "antd";
 import {DateFormatString} from "../../../constants/strings";
+import {ITask} from "../../../models/task";
 
 interface Props {
   data: ITaskDevice[];
@@ -21,6 +22,8 @@ interface Props {
     onUpload:(item:ITaskDevice)=>void;
     onBatchUploadReport:(its:string[])=>void;
     onPrint: (item: ITaskDevice)=>void;
+    onDetail: (item: ITaskDevice)=>void;
+    task?:ITask;
 }
 
 const TaskRunDetectedDeviceTable: FC<Props> = ({
@@ -36,7 +39,9 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
     onUpload,
     onPrint,
                                                    onDownloadTemplate,
-    onBatchUploadReport
+    onBatchUploadReport,
+    task,
+    onDetail
 }) => {
   const { t } = useTranslation(["taskdevice","device","task","common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -86,7 +91,14 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
               title: t("common:operations"),
               dataIndex: "OPERATIONS",
               render: (v: unknown, r: ITaskDevice) => (
-                  <>
+                  <><Button
+                      size="small"
+                      onClick={() =>onDetail(r)}
+                      title={t("common:detail")}
+                      type="link"
+                  >
+                      {t("common:detail")}
+                  </Button>
                       {r.status=='2'||r.status=='3'||r.status=='4'?(
                       <Button
                           size="small"
@@ -96,7 +108,7 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
                       >
                           {t("common:view")}
                       </Button>):""}
-                      {r.status=='2'||r.status=='3'?(
+                      {((r.status=='2'||r.status=='3') &&  task?.status=='1')?(
                       <Button
                           size="small"
                           onClick={() =>onUpload(r)}

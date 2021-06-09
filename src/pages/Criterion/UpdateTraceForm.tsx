@@ -181,10 +181,10 @@ const UpdateTraceForm: FC<Props> = ({ visible, item, onSave, onCancel,datas,its 
                   <Divider></Divider>
                   <Row style={{padding:"5"}}>
                     <Col span={12}>
-                      <Col span={6}><label>{t("instrumentName")}:</label><span>{trace.criterion?.instrumentName}</span></Col>
-                      <Col span={6}><label>{t("criterionName")}:</label><span>{trace.criterion?.criterion.criterionName}</span></Col>
-                      <Col span={6}><label>{t("standardType")}:</label><span>{trace.criterion?.standardType}</span></Col>
-                      <Col span={6}><label>{t("factoryNumber")}:</label><span>{trace.criterion?.factoryNumber}</span></Col>
+                      <Col span={24}><label>{t("instrumentName")}:</label><span style={{marginLeft:"1em"}}>{trace.criterion?.instrumentName}</span></Col>
+                      <Col span={24}><label>{t("criterionName")}:</label><span style={{marginLeft:"1em"}}>{trace.criterion?.criterion.criterionName}</span></Col>
+                      <Col span={24}><label>{t("standardType")}:</label><span style={{marginLeft:"1em"}}>{trace.criterion?.standardType}</span></Col>
+                      <Col span={24}><label>{t("factoryNumber")}:</label><span style={{marginLeft:"1em"}}>{trace.criterion?.factoryNumber}</span></Col>
                     </Col>
                     <Col span={12}>
                       <Upload {...prop}>

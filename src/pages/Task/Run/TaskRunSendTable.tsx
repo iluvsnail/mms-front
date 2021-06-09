@@ -12,6 +12,7 @@ import {DateFormatString} from "../../../constants/strings";
 
 interface Props {
   data: ITaskDevice[];
+  task?:ITask;
   its:string[];
   loading: boolean;
   setSelectedRows:(its:string[])=>void;
@@ -23,6 +24,7 @@ interface Props {
     onRevoke:(item:ITaskDevice)=>void;
     onSend: (item: ITaskDevice)=> void;
     onEdit: (item: ITaskDevice)=> void;
+    onDetail: (item: ITaskDevice)=>void;
 }
 
 const TaskRunSendTable: FC<Props> = ({
@@ -37,7 +39,8 @@ const TaskRunSendTable: FC<Props> = ({
     onRevoke,
     onSend,
     onEdit,
-    onBatchSend
+    onBatchSend,
+    task,onDetail
 }) => {
   const { t } = useTranslation(["taskdevice","device","task","common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -88,7 +91,15 @@ const TaskRunSendTable: FC<Props> = ({
               dataIndex: "OPERATIONS",
               render: (v: unknown, r: ITaskDevice) => (
                   <>
-                      {r.status=='3' ?(
+                      <Button
+                          size="small"
+                          onClick={() =>onDetail(r)}
+                          title={t("common:detail")}
+                          type="link"
+                      >
+                          {t("common:detail")}
+                      </Button>
+                      {r.status=='3' &&  task?.status=='1'?(
                           <Button
                               size="small"
                               onClick={() =>onEdit(r)}
@@ -98,7 +109,7 @@ const TaskRunSendTable: FC<Props> = ({
                               {t("common:edit")}
                           </Button>):""}
 
-                      {r.status=='3' ?(
+                      {(r.status=='3' && task?.status=='1')?(
                           <Popconfirm
                               onConfirm={() =>onRevoke(r)}
                               title={t("confirmRevoke")}

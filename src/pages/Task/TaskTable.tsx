@@ -126,7 +126,7 @@ const TaskTable: FC<Props> = ({
               </Button>
             </Popconfirm>
                   {
-                      (r.instrumentCount >0 && r.receivedDeviceCount >0 && r.receivedDeviceCount== r.detectedDeviceCount && r.receivedDeviceCount == r.sentDeviceCount)?(<Button
+                      r.status == '1' &&(r.instrumentCount >0 && r.receivedDeviceCount >0 && r.receivedDeviceCount== r.detectedDeviceCount && r.receivedDeviceCount == r.sentDeviceCount)?(<Button
                           size="small"
                           onClick={() => onFinish(r)}
                           title={t("task:finish")}
