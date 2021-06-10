@@ -11,7 +11,7 @@ import {
   asyncPutTaskDevice,
   asyncDownloadTemplate,
   asyncBatchReceiveTaskDevice, asyncBatchSendTaskDevice, asyncBatchUploadTaskDevice
-  , asyncFkPrintItem
+  , asyncFkPrintItem, asyncGetFiles
 } from "./taskrun.services";
 import {Button, Col, Divider, message, Row, Tabs,Form,Input} from "antd";
 import {ITask} from "../../../models/task";
@@ -36,6 +36,7 @@ import {ICertificate} from "../../../models/certificate";
 import PrintForm from "./PrintForm";
 import {isAdmin} from "../../../utils/tokenUtils";
 import DetailForm from "./DetailForm";
+import ImportDataForm from "./ImportDataForm";
 
 const TaskRun: FC = () => {
   const [criterionList, setCriterionList] = useState<ICriterion[]>([]);
@@ -50,7 +51,8 @@ const TaskRun: FC = () => {
   const [scanFormVisible, setScanFormVisible] = useState(false);
   const [printVisible, setPrintVisible] = useState(false);
   const [detailVisible, setDetailVisible] = useState(false);
-
+  const [importDataVisible, setImportDataVisible] = useState(false);
+  const [files,setFiles] = useState<string[]>([])
 
   const [batchReceiveFormVisible, setBatchReceiveFormVisible] = useState(false);
   const [batchReceiveTaskDeviceList, setBatchReceiveTaskDeviceList] = useState<ITaskDevice[]>([]);
@@ -70,6 +72,7 @@ const TaskRun: FC = () => {
   const [uploadItem, setUploadItem] = useState<ITaskDevice>();
   const [printItem, setPrintItem] = useState<ITaskDevice>();
   const [detailItem, setDetailItem] = useState<ITaskDevice>();
+  const [importDataItem, setImportDataItem] = useState<ITaskDevice>();
   const [params, setParams] = useState<Record<string, unknown>>();
   const [deviceParams, setDeviceParams] = useState<Record<string, unknown>>();
   const [form] = Form.useForm();
@@ -177,7 +180,6 @@ const TaskRun: FC = () => {
   }, [deviceParams, deviceList]);
   //组装taskdevice
   useEffect(() => {
-    debugger;
     if(deviceList && deviceList.length>0){
       const tdl:ITaskDevice[] = []
       deviceList.map((device)=>{
@@ -197,7 +199,8 @@ const TaskRun: FC = () => {
           isDelete: "0",
           task: item,
           updateDate: 0,
-          status:"0"
+          status:"0",
+          fileName:""
         };
         taskDeviceList.map((td)=>{
           if(td.device.id == device.id) taskDevice =td;
@@ -514,6 +517,49 @@ const TaskRun: FC = () => {
       },
       [onDetailClose]
   );
+
+  //import data
+  const onImportDataClose = useCallback(() => {
+    setImportDataItem(undefined);
+    setImportDataVisible(false);
+  }, []);
+  const onImportData = useCallback((editItem: ITaskDevice) => {
+    asyncGetFiles( (res) => {
+      if (res.isOk) {
+        setFiles(res.data);
+        setImportDataItem(editItem);
+        setImportDataVisible(true);
+      }
+    });
+  }, []);
+  const onSaveImportData = useCallback(
+      (data:ITaskDevice) => {
+        debugger;
+        setLoading(true);
+        data.status="2";
+        asyncPutTaskDevice(data, (res) => {
+          setLoading(false);
+          if(item){
+            item.detectedDeviceCount=item.detectedDeviceCount+1;
+            setItem(item)
+          }
+          if (res.isOk) {
+            setTaskDeviceList((prev) =>
+                prev.map((p) => {
+                  if (p.device.id == data.device.id) {
+                    return res.data;
+                  }
+                  return p;
+                })
+            );
+            message.success("操作成功");
+            onImportDataClose();
+          }
+        });
+      },
+      [onImportDataClose]
+  );
+
   //uploadReport
   const onUploadClose = useCallback(() => {
     setUploadItem(undefined);
@@ -785,6 +831,7 @@ const TaskRun: FC = () => {
                   onPrint={onPrint}
                   task={item}
                   onDetail={onDetail}
+                  onImportData={onImportData}
               /><Divider></Divider>
               {
                 isAdmin()?(
@@ -839,6 +886,7 @@ const TaskRun: FC = () => {
           <BatchUploadForm visible={batchUploadFormVisible} onSave={onBatchUploadSave} onCancel={onBatchUploadClose} datas={batchUploadTaskDeviceList}/>
           <PrintForm item={printItem} visible={printVisible} onSave={onPrintSave} onCancel={onPrintClose}/>
           <DetailForm item={detailItem} visible={detailVisible} onSave={onSaveDetail} onCancel={onDetailClose} />
+          <ImportDataForm item={importDataItem} visible={importDataVisible} onSave={onSaveImportData} onCancel={onImportDataClose} files={files}/>
           </>
       </StyledContainer>
   );

@@ -23,6 +23,7 @@ interface Props {
     onBatchUploadReport:(its:string[])=>void;
     onPrint: (item: ITaskDevice)=>void;
     onDetail: (item: ITaskDevice)=>void;
+    onImportData: (item: ITaskDevice)=>void;
     task?:ITask;
 }
 
@@ -41,7 +42,8 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
                                                    onDownloadTemplate,
     onBatchUploadReport,
     task,
-    onDetail
+    onDetail,
+    onImportData
 }) => {
   const { t } = useTranslation(["taskdevice","device","task","common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -135,14 +137,24 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
                       <Button onClick={() =>onDownloadTemplate(r)} title={t("common:downloadTemplate")} type="link" style={{ marginLeft: "1rem", cursor: "pointer" }}>
                           {t("common:downloadTemplate")}
                       </Button>):""}
-                      {r.status=='1'?(<Button
+                      {r.status=='1'?(
+                          <>
+                          <Button
                           size="small"
                           onClick={() =>onUpload(r)}
                           title={t("common:uploadReport")}
                           type="link"
                       >
                           {t("common:uploadReport")}
-                      </Button>):""}
+                      </Button>
+                              <Button
+                              size="small"
+                              onClick={() =>onImportData(r)}
+                              title={t("导入检定数据")}
+                              type="link"
+                          >
+                              {t("导入检定数据")}
+                          </Button></>):""}
 
 
                   </>

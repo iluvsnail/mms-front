@@ -19,4 +19,6 @@ export interface ITaskDevice {
   endPerson:string;
   validDate:any;
   result?:string;
-  ys?:Array<String>;}
+  ys?:Array<String>;
+  fileName:string;
+}

@@ -130,3 +130,10 @@ export const asyncFkPrintItem = async (data: ITaskDevice, cb: AsyncCallback) => 
   });
   callback(res, cb, data);
 };
+export const asyncGetFiles = async (cb: AsyncCallback, data?:Record<string, unknown>) => {
+  const res = await YSAxios.post(`${api.task}/files`,data).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, []);
+};
