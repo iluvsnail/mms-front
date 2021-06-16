@@ -61,6 +61,10 @@ const User: FC = () => {
     setFormVisible(true);
   }, []);
   const onBatchDel =useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncDelUsers(its, (res) => {
       if (res.isOk) {
         message.success("删除成功");
@@ -69,6 +73,10 @@ const User: FC = () => {
     });
   },[]);
   const onBatchLock = useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncLockUsers(its, (res) => {
       if (res.isOk) {
         message.success("锁定用户成功");
@@ -77,6 +85,10 @@ const User: FC = () => {
     });
   }, []);
   const onBatchUnlock = useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncUnlockUsers(its, (res) => {
       if (res.isOk) {
         message.success("解锁用户成功");
@@ -85,6 +97,10 @@ const User: FC = () => {
     });
   }, []);
   const onBatchResetPassword = useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncResetUsersPassword(its, (res) => {
       if (res.isOk) {
         message.success("重置密码成功");

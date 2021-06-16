@@ -14,7 +14,7 @@
   "status":"状态",
   "currentStatus":"任务状态",
   "startFinishDate": "起止日期",
-  "progress": "任务进度(仪器数—已接受—已检定—已发放）",
+  "progress": "任务进度(仪器数—已接收—已检定—已发放）",
   "finish": "完成",
   "enterTask": "进入任务",
   "selectStatus": "选择状态",

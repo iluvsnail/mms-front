@@ -76,6 +76,10 @@ const Device: FC = () => {
     setFormVisible(true);
   }, []);
   const onBatchDel =useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncDelDevices(its, (res) => {
       if (res.isOk) {
         message.success("删除成功");

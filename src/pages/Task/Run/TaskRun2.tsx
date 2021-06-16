@@ -793,7 +793,7 @@ const TaskRun2: FC = () => {
               />
               <Divider></Divider>
               {
-                (isAdmin() && item?.status =='1')?(
+                (isAdmin() && (item?.status =='1' || item?.status=='0'))?(
                     <Row >
                       <Col span={2} offset={10}><Button onClick={() => {
                         onOk()

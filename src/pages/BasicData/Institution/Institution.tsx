@@ -5,12 +5,6 @@ import {
   asyncDelInstitution,
   asyncGetInstitutionData,
   asyncPutInstitution,
-  asyncGetCodeData,
-  asyncDelCriterions,
-  asyncLockUser,
-  asyncResetPassword,
-  asyncLockUsers,
-  asyncResetUsersPassword
 } from "./institution.services";
 import InstitutionForm from "./InstitutionForm";
 import {message, Row, Col, Divider, Tree, Popconfirm, Button} from "antd";
@@ -62,9 +56,10 @@ const Institution: FC = () => {
 
             <Popconfirm
                 onConfirm={(e) => onDel(it,e)}
+                onCancel={e=>e?.stopPropagation()}
                 title={t("common:confirmDelete")}
             >
-              <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}}/>
+              <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}} onClick={e=>e.stopPropagation()}/>
             </Popconfirm>
             <PlusCircleTwoTone  style={{"margin":"0px 0px 0px 5px"}} onClick={(e)=>onAddInstitution(it.id,it.level,e)}/>
           </>);
@@ -78,9 +73,10 @@ const Institution: FC = () => {
             <FormOutlined style={{"margin":"0px 0px 0px 25px"}} onClick={(e)=>onEdit(it,e)}/>
             <Popconfirm
                 onConfirm={(e) => onDel(it,e)}
+                onCancel={e=>e?.stopPropagation()}
                 title={t("common:confirmDelete")}
             >
-            <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}}/>
+            <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}} onClick={e=>e.stopPropagation()}/>
             </Popconfirm>
             <PlusCircleTwoTone  style={{"margin":"0px 0px 0px 5px"}} onClick={(e)=>onBindDevice(it.id,it.level,e)}/>
           </>);
@@ -97,9 +93,10 @@ const Institution: FC = () => {
             <FormOutlined style={{"margin":"0px 0px 0px 25px"}} onClick={(e)=>onEdit(it,e)}/>
             <Popconfirm
                 onConfirm={(e) => onDel(it,e)}
+                onCancel={e=>e?.stopPropagation()}
                 title={t("common:confirmDelete")}
             >
-            <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}}/>
+            <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}} onClick={e=>e.stopPropagation()}/>
             </Popconfirm>
           </>);
           if(!children.get(it.pt)){
@@ -176,7 +173,9 @@ const Institution: FC = () => {
   }, []);
 
   const onDel = useCallback((data: IInstitution,e?) => {
-    if(e)e.stopPropagation();
+    if(e){
+      e.stopPropagation();
+    }
     asyncDelInstitution(data, (res) => {
       if (res.isOk) {
         message.success("删除成功");

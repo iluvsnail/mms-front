@@ -133,7 +133,7 @@ const TaskRunDetectedDeviceTable: FC<Props> = ({
                           </Popconfirm>
                       </Popconfirm>):""}
 
-                      {r.status=="1"?(
+                      {r.status=="1" && r.template?(
                       <Button onClick={() =>onDownloadTemplate(r)} title={t("common:downloadTemplate")} type="link" style={{ marginLeft: "1rem", cursor: "pointer" }}>
                           {t("common:downloadTemplate")}
                       </Button>):""}

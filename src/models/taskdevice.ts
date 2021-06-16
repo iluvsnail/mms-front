@@ -21,4 +21,5 @@ export interface ITaskDevice {
   result?:string;
   ys?:Array<String>;
   fileName:string;
+  template?:[];
 }

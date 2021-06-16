@@ -96,7 +96,7 @@ const TaskRunDeviceTable: FC<Props> = ({
                           {t("common:edit")}
                       </Button>):""}
 
-                      {r.status=='0'?(<Button
+                      {(r.status=='0'&& task?.status=='1')?(<Button
                           size="small"
                           onClick={()=> onReceived(r)}
                           title={t("receive")}

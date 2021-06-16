@@ -25,6 +25,7 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
 
   useEffect(() => {
     if (visible && item && form) {
+      debugger;
       form.setFieldsValue(item);
       setRolesOption({
         id: item?.criterion?.id || '',
@@ -88,7 +89,7 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
           >
             <Input />
           </Form.Item>
-          {level=="1"?(<>
+          {(item?item.level=="2":level=="1")?(<>
           <Form.Item
               label={t("standardType")}
               name="standardType"

@@ -6,7 +6,7 @@ import {
   asyncPutDeviceType,
 } from "./deviceType.services";
 import DeviceTypeForm from "./DeviceTypeForm";
-import {message, Row, Col, Divider, Tree, Popconfirm, Button, Form, Input, Upload,Image} from "antd";
+import {message, Row, Col, Divider, Tree, Popconfirm, Button, Form, Input, Upload, Image, Spin} from "antd";
 import { PlusCircleTwoTone, FormOutlined,DeleteOutlined} from '@ant-design/icons';
 import {IDeviceType} from "../../../models/devicetype";
 import {useTranslation} from "react-i18next";
@@ -22,10 +22,12 @@ const DeviceType: FC = () => {
   const [loading, setLoading] = useState(true);
   const [fileList,setFileList] =useState<any[]>([]);
   const [item, setItem] = useState<IDeviceType>();
+  const [editItem, setEditItem] = useState<IDeviceType>();
   const [formVisible, setFormVisible] = useState(false);
   const [treeData,setTreeData] = useState<{key:string}[]>([])
   let [selectedRows,setSelected]=useState<string[]>([])
   const [codes,setCodes] = useState<ICodecriterion[]>([]);
+  const [spinning, setSpinning] = useState<boolean>(true);
   const [form] = Form.useForm();
   useEffect(() => {
     if (item && form) {
@@ -36,10 +38,12 @@ const DeviceType: FC = () => {
     setSelected(selectedRows)
   },[selectedRows])
   const loadData = useCallback(() => {
+    setSpinning(true);
     asyncGetDeviceTypeData((res) => {
       if (res.isOk) {
         setList(res.data);
       }
+      setSpinning(false);
     });
 
     asyncGetCodeData((res) => {
@@ -147,11 +151,11 @@ const DeviceType: FC = () => {
     setFormVisible(true);
   }, []);
   const onEdit = useCallback((editItem: IDeviceType) => {
-    setItem(editItem);
+    setEditItem(editItem);
     setFormVisible(true);
   }, []);
   const onClose = useCallback(() => {
-    setItem(undefined);
+    setEditItem(undefined);
     setFormVisible(false);
   }, []);
 
@@ -268,12 +272,14 @@ const DeviceType: FC = () => {
             设备类别管理树状图<PlusCircleTwoTone onClick={(e)=>onAddDeviceType(e)}/>
             <Divider></Divider>
             {treeData.length>0 &&
-            <Tree
-                showLine={true}
-                treeData={treeData}
-                defaultExpandAll
-                onSelect={(sk,info)=>onSelect(sk,info)}
-            />}
+                <Spin spinning={spinning}>
+                  <Tree
+                      showLine={true}
+                      treeData={treeData}
+                      defaultExpandAll
+                      onSelect={(sk,info)=>onSelect(sk,info)}
+                  />
+                </Spin>}
           </Col>
           <Col span={16} style={{display:`${item&&item.level=='2'?"block":"none"}`}}>
             <Form
@@ -346,7 +352,7 @@ const DeviceType: FC = () => {
           onCancel={onClose}
           pt={pt}
           level={level}
-          item={item}
+          item={editItem}
           codes={codes}
       ></DeviceTypeForm>
     </StyledContainer>
