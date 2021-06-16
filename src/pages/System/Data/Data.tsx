@@ -49,7 +49,7 @@ const Data: FC = () => {
           {t("backup")}
         </Button></Col>
         <Col span={2} >
-          <Upload {...props}>
+          <Upload showUploadList={false} {...props}>
             <Button  title={t("restore")}>
               {t("restore")}
             </Button>
