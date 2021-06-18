@@ -43,7 +43,7 @@ const TaskRun: FC = () => {
   const [deviceList, setDeviceList] = useState<IDevice[]>([]);
   const [taskDeviceList, setTaskDeviceList] = useState<ITaskDevice[]>([]);
   const [codes,setCodes] = useState<ICodecriterion[]>([]);
-  const [codeV,setCodeV] = useState<string>("");
+  const [codeV,setCodeV] = useState<any[]>([]);
   const [formVisible, setFormVisible] = useState(false);
   const [sendFormVisible, setSendFormVisible] = useState(false);
   const [sendEditVisible, setSendEditFormVisible] = useState(false);
@@ -151,8 +151,14 @@ const TaskRun: FC = () => {
 
   const filteredCriterionList = useMemo(() => {
     let result = [...criterionList];
-    if (codeV) {
-      result = result.filter(r => r.criterion.id == codeV);
+    if (codeV && codeV.length>0) {
+      result = result.filter(r => {
+        for(let idx in codeV){
+          if(r.criterion.id == codeV[idx]){
+            return true;
+          }
+        }
+      });
     }
     if(!isAdmin()){
       //仅显示选中结果
@@ -227,7 +233,7 @@ const TaskRun: FC = () => {
     return taskDeviceList;
   }, [deviceParams, taskDeviceList]);
 
-  const onCodeChange = (v:string)=>{
+  const onCodeChange = (v:any[])=>{
     setCodeV(v)
   }
   const onSearch = (v:string)=>{
@@ -534,7 +540,7 @@ const TaskRun: FC = () => {
   }, []);
   const onSaveImportData = useCallback(
       (data:ITaskDevice) => {
-        debugger;
+
         setLoading(true);
         data.status="2";
         asyncPutTaskDevice(data, (res) => {
@@ -623,53 +629,125 @@ const TaskRun: FC = () => {
   const onDownloadTemplate = useCallback((data: ITaskDevice) => {
     asyncDownloadTemplate(data);
   }, []);
-  const onBatchRevoke=useCallback((its:string[]) => {
-    asyncBatchRevoke(its, (res) => {
+  const onBatchRevoke=useCallback((its:string[],sts:string) => {
+
+    if(item?.status != "1"){
+      message.info("任务未开始，不能进行撤销操作")
+      return;
+    }
+    let bd="";
+    const rst = new Array();
+    its.map(it=>{
+      taskDeviceList.filter(td=>td.id==it).map(td=>{
+        if(td.status != sts){
+          bd=bd+td.device.deviceName+" "
+        }else{
+          rst.push(it)
+        }
+      })
+    })
+    if(bd){
+      if(rst.length>0){
+        message.warn("设备："+bd+"无法进行撤销操作，已过滤！");
+      }else{
+        message.warn("设备："+bd+"无法进行撤销操作，且无其他可操作数据！");
+        return;
+      }
+    }
+    asyncBatchRevoke(rst, (res) => {
       if (res.isOk) {
         message.success("操作成功");
-        setTaskDeviceList((prev) =>
-            prev.map((p) => {
-              its.map(it=>{
-                if(it==p.id){
-                  p.status = "4";
-                }
-              })
-              return p;
-            })
-        );
+        rst.map(it=>{
+          setTaskDeviceList((prev)=>prev.filter(p=>it!=p.id));
+        })
       }
     });
-  },[]);
+  },[item,taskDeviceList]);
   const onBatchReceived=useCallback((its:string[]) => {
+    if(item?.status != "1"){
+      message.info("任务未开始，不能进行设备接收")
+      return;
+    }
+    let bd="";
     const rst = new Array();
     its.map(it=>{
-      taskDeviceList.filter(td=>td.id==it).filter(td=>{
-        rst.push(td)
+      taskDeviceList.filter(td=>td.id==it).map(td=>{
+        if(td.status != "0"){
+          bd=bd+td.device.deviceName+" "
+        }else{
+          rst.push(td)
+        }
       })
     })
+    if(bd){
+      if(rst.length>0){
+        message.warn("设备："+bd+"无法进行接收操作，已过滤！");
+      }else{
+        message.warn("设备："+bd+"无法进行接收操作，且无其他可操作数据！");
+        return;
+      }
+    }
     setBatchReceiveTaskDeviceList(rst);
     setBatchReceiveFormVisible(true);
-  },[taskDeviceList]);
+  },[taskDeviceList,item]);
   const onBatchSend=useCallback((its:string[]) => {
+    if(item?.status != "1"){
+      message.info("任务未开始，不能进行设备发放")
+      return;
+    }
+    let bd="";
     const rst = new Array();
     its.map(it=>{
-      taskDeviceList.filter(td=>td.id==it).filter(td=>{
-        rst.push(td)
+      taskDeviceList.filter(td=>td.id==it).map(td=>{
+        if(td.status != "2"){
+          bd=bd+td.device.deviceName+" "
+        }else{
+          td.template = []
+          td.template2 = []
+          rst.push(td)
+        }
       })
     })
+    if(bd){
+      if(rst.length>0){
+        message.warn("设备："+bd+"无法进行发放操作，已过滤！");
+      }else{
+        message.warn("设备："+bd+"无法进行发放操作，且无其他可操作数据！");
+        return;
+      }
+    }
     setBatchSendTaskDeviceList(rst);
     setBatchSendFormVisible(true);
   },[taskDeviceList]);
   const onBatchUploadReport=useCallback((its:string[]) => {
+    if(item?.status != "1"){
+      message.info("任务未开始，不能上传检定报告")
+      return;
+    }
+    let bd="";
     const rst = new Array();
     its.map(it=>{
-      taskDeviceList.filter(td=>td.id==it).filter(td=>{
-        rst.push(td)
+      taskDeviceList.filter(td=>td.id==it).map(td=>{
+        if(td.status != "1"){
+          bd=bd+td.device.deviceName+" "
+        }else{
+          td.template = []
+          td.template2 = []
+          rst.push(td)
+        }
       })
     })
+    if(bd){
+      if(rst.length>0){
+        message.warn("设备："+bd+"无法进行上传报告操作，已过滤！");
+      }else{
+        message.warn("设备："+bd+"无法进行上传报告操作，且无其他可操作数据！");
+        return;
+      }
+    }
     setBatchUploadTaskDeviceList(rst);
     setBatchUploadFormVisible(true);
-  },[taskDeviceList]);
+  },[taskDeviceList,item]);
   const onScan = useCallback(() => {
     setScanFormVisible(true);
   }, []);

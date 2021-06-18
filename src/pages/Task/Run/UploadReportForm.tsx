@@ -3,7 +3,6 @@ import {Button, DatePicker, Form, Input, message, Modal, Upload} from "antd";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import log from "loglevel";
-import {ITask} from "../../../models/task";
 import {ITaskDevice} from "../../../models/taskdevice";
 import {BASE_URL} from "../../../utils/apiUtils";
 import api from "../../../configs/api";
@@ -25,6 +24,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
     if (visible && item && form) {
       if(item.detectedDate) item.detectedDate = dayjs(item.detectedDate);
       if(item.validDate) item.validDate = dayjs(item.validDate);
+      setFileList([])
       form.setFieldsValue(item);
     }
   }, [visible, item, form]);
@@ -64,16 +64,19 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
     headers: {
       authorization: 'authorization-text',
     },
-    showUploadList:false,
     withCredentials:true,
     onChange(info:any) {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
+        console.log("done")
         message.success(`${info.file.name} 文件上传成功`);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败`);
+      }
+      if(info.fileList){
+        setFileList(info.fileList);
       }
     },
   };
@@ -130,7 +133,7 @@ const UploadReportForm: FC<Props> = ({ visible, item, onSave, onCancel}) => {
           <Form.Item
               label={t("report")}
           >
-            <Upload {...props}>
+            <Upload fileList={fileList} {...props}>
               <Button type="primary"  title={t("upload")}>
                 {t("uploadReport")}
               </Button>

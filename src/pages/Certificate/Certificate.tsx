@@ -12,7 +12,7 @@ import {
   asyncLockUser,
   asyncResetPassword,
   asyncLockUsers,
-  asyncResetUsersPassword, asyncExportCertificates,asyncPrintItem
+  asyncResetUsersPassword, asyncExportCertificates, asyncPrintItem, asyncPrintItems
 } from "./certificate.services";
 import CertificateForm from "./CertificateForm";
 import { message } from "antd";
@@ -206,7 +206,23 @@ const Certificate: FC = () => {
     setSelected(its)
   }
   const onBatchExport = useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncExportCertificates(its);
+  }, []);
+  const onBatchPrint = useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
+    setPrintVisible(true);
+    asyncPrintItems(its, (res) => {
+      if (res.isOk) {
+        setItem(res.data);
+      }
+    });
   }, []);
   const onPrint = useCallback((editItem: ICertificate) => {
     setPrintVisible(true);
@@ -247,7 +263,7 @@ const Certificate: FC = () => {
       <CertificateTable
         data={filteredList}
         loading={loading}
-        onBatchPrint={onBatchTodo}
+        onBatchPrint={onBatchPrint}
         onBatchExport={onBatchExport}
         onBatchImport={onBatchTodo}
         onBatchDel={onBatchDel}

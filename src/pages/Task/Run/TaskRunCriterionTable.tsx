@@ -13,7 +13,7 @@ interface Props {
   its:string[];
   loading: boolean;
   setSelectedRows:(its:string[])=>void;
-  onCodeChange:(v:string)=>void;
+  onCodeChange:(v:any[])=>void;
     onSearch:(v:string)=>void;
 }
 

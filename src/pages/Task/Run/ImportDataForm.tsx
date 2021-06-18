@@ -22,7 +22,7 @@ const ImportDataForm: FC<Props> = ({ visible, item, onSave, onCancel,files}) => 
   const { t } = useTranslation(["taskdevice","task", "common"]);
   const [file,setFile]=useState<number>(0)
   function onChange(e:any){
-    debugger;
+    
     console.log('radio checked', e.target.value);
     setFile(e.target.value);
   };

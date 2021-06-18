@@ -9,7 +9,12 @@ import {
   asyncPutDevice,
   asyncGetCodeData,
   asyncDelDevices,
-  asyncGetDeviceCodeData, asyncGetInstitutionCodeData, asyncGetDeviceRecord, asyncExportDevices, asyncPrintItem
+  asyncGetDeviceCodeData,
+  asyncGetInstitutionCodeData,
+  asyncGetDeviceRecord,
+  asyncExportDevices,
+  asyncPrintItem,
+  asyncPrintItems
 } from "./device.services";
 import DeviceForm from "./DeviceForm";
 import { message } from "antd";
@@ -20,9 +25,9 @@ import PrintForm from "./PrintForm";
 import {IInstitution} from "../../models/institution";
 import {ITaskDevice} from "../../models/taskdevice";
 import RecordForm from "./RecordForm";
-import {asyncExportTasks} from "../Task/task.services";
 import {BASE_URL} from "../../utils/apiUtils";
 import api from "../../configs/api";
+import BatchPrintForm from "./BatchPrintForm";
 
 const Device: FC = () => {
   const [list, setList] = useState<IDevice[]>([]);
@@ -33,9 +38,11 @@ const Device: FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState<IDevice>();
+  const [items,setItems] = useState<IDevice[]>([]);
   const [formVisible, setFormVisible] = useState(false);
   const [recordFormVisible, setRecordFormVisible] = useState(false);
   const [printVisible, setPrintVisible] = useState(false);
+  const [batchPrintVisible, setBatchPrintVisible] = useState(false);
   const [detailVisible, setDetailVisible] = useState(false);
   const [params, setParams] = useState<Record<string, unknown>>();
   let [selectedRows,setSelected]=useState<string[]>([])
@@ -99,6 +106,19 @@ const Device: FC = () => {
       }
     });
   }, []);
+
+  const onBatchPrint = useCallback((its: string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
+    asyncPrintItems(its, (res) => {
+      if (res.isOk) {
+        setItems(res.data);
+        setBatchPrintVisible(true);
+      }
+    });
+  }, []);
   const onTodo = useCallback((editItem: IDevice) => {
     message.warn("待实现！");
   }, []);
@@ -125,7 +145,10 @@ const Device: FC = () => {
     setItem(undefined);
     setPrintVisible(false);
   }, []);
-
+  const onBatchPrintClose = useCallback(() => {
+    setItems([]);
+    setBatchPrintVisible(false);
+  }, []);
   const onDel = useCallback((data: IDevice) => {
     asyncDelDevice(data, (res) => {
       if (res.isOk) {
@@ -202,6 +225,26 @@ const Device: FC = () => {
       },
       [onPrintClose]
   );
+
+  const onBatchPrintSave = useCallback(
+      () => {
+        let el = document.getElementById("qrcodes");
+        let iframe = document.createElement('IFRAME') as HTMLIFrameElement;
+        let doc = null;
+        iframe.setAttribute('style', 'position:absolute;width:0px;height:0px;left:-500px;top:-500px;');
+        document.body.appendChild(iframe);
+        doc = iframe.contentWindow?.document;
+        doc?.write(el?.outerHTML||"");
+        doc?.close();
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+        if (navigator.userAgent.indexOf("MSIE") > 0)
+        {
+          document.body.removeChild(iframe);
+        }
+      },
+      [onBatchPrintClose]
+  );
   const onSearch = useCallback((newParams?: Record<string, unknown>) => {
     setParams(newParams);
   }, []);
@@ -253,6 +296,10 @@ const Device: FC = () => {
     setSelected(its)
   }
   const onBatchExport = useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncExportDevices(its);
   }, []);
   return (
@@ -264,7 +311,7 @@ const Device: FC = () => {
         data={filteredList}
         loading={loading}
         onAdd={onAdd}
-        onBatchPrint={onBatchTodo}
+        onBatchPrint={onBatchPrint}
         onBatchExport={onBatchExport}
         onBatchImport={onBatchTodo}
         onBatchDel={onBatchDel}
@@ -288,6 +335,7 @@ const Device: FC = () => {
         institutionCodes = {institutionCodes}
       />
       <PrintForm item={item} visible={printVisible} onSave={onPrintSave} onCancel={onPrintClose}/>
+      <BatchPrintForm items={items} visible={batchPrintVisible} onSave={onBatchPrintSave} onCancel={onBatchPrintClose}/>
       <DeviceDetail
           visible={detailVisible}
           onSave={onDetailSave}

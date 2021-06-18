@@ -27,7 +27,7 @@ import api from "../../configs/api";
 interface Props<RecordType = any> extends TableProps<RecordType> {
     dataSource: RecordType[];
     codes?: ICodecriterion[];
-    onCodeChange?: (v: string) => void;
+    onCodeChange?: (v: any[]) => void;
     onSearch?: (v: string) => void;
     onShowAdded?: (v: boolean) => void;
     onShowDetected?: (v: boolean) => void;
@@ -40,7 +40,7 @@ interface Props<RecordType = any> extends TableProps<RecordType> {
     onBatchLock?: (its: string[]) => void;
     onScan?: () => void;
     onBatchReceived?: (its: string[]) => void;
-    onBatchRevoke?: (its: string[]) => void;
+    onBatchRevoke?: (its: string[],sts:string) => void;
     onBatchUploadReport?: (its: string[]) => void;
     onBatchSend?: (its: string[]) => void;
     onBatchResetPassword?: (its: string[]) => void;
@@ -49,6 +49,7 @@ interface Props<RecordType = any> extends TableProps<RecordType> {
     onBatchExport?: (its: string[]) => void;
     onBatchFinish?: (its: string[]) => void;
     onUpdateTracing?: (its: string[]) => void;
+    sts?:string;
     onRefresh?: () => void; // 设置之后展示刷新按钮
     showSizeChanger?: boolean;
     // TODO: 设置之后展示列项编辑功能
@@ -91,6 +92,7 @@ const YSTable: FC<Props> = ({
                                 showColumnsChanger,
                                 isAdmin,
                                 importUrl,
+    sts,
                                 ...tableProps
                             }) => {
     const {t, i18n} = useTranslation("common");
@@ -127,11 +129,11 @@ const YSTable: FC<Props> = ({
         ...pagination,
     };
     const codesRadio = codes?.map(v => {
-        return <Radio value={v.id}>{v.criterionName}</Radio>
+        return <Checkbox value={v.id}>{v.criterionName}</Checkbox>
     })
     const props = {
         name: 'file',
-        accept: ".xlsx",
+        accept: ".xlsx,.xls",
         showUploadList: false,
         headers: {
             authorization: 'authorization-text',
@@ -157,9 +159,9 @@ const YSTable: FC<Props> = ({
                 <div style={{flex: 1}}>
                     {tableTitle || ""}
                     {codes && onCodeChange ? (
-                        <Radio.Group onChange={(e) => onCodeChange(e.target.value)}>
-                            ${codesRadio}
-                        </Radio.Group>
+                        <Checkbox.Group onChange={(e) => onCodeChange(e)}>
+                            {codesRadio}
+                        </Checkbox.Group>
                     ) : null}
                     {
                         onShowAdded ? (
@@ -291,7 +293,7 @@ const YSTable: FC<Props> = ({
                     ) : null}
                     {onBatchRevoke ? (
                         <Popconfirm
-                            onConfirm={() => onBatchRevoke(its ? its : [])}
+                            onConfirm={() => onBatchRevoke(its ? its : [],sts?sts:"")}
                             title={t("common:confirmRevoke")}
                         >
                             <Button title={t("batchRevoke")}

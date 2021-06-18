@@ -17,7 +17,7 @@ interface Props {
   setSelectedRows:(its:string[])=>void;
     onShowAdded?:(v:boolean)=>void;
     onBatchReceived?:(its:string[])=>void;
-    onBatchRevoke?:(its:string[])=>void;
+    onBatchRevoke?:(its:string[],sts:string)=>void;
     onScan?:()=>void;
     onReceived:(item:ITaskDevice)=>void;
     onRevoke:(item:ITaskDevice)=>void;
@@ -135,6 +135,7 @@ const TaskRunDeviceTable: FC<Props> = ({
       onScan={onScan}
       onBatchReceived={onBatchReceived}
       onBatchRevoke={onBatchRevoke}
+      sts={"1"}
     />
   );
 };

@@ -133,3 +133,10 @@ export const asyncPrintTaskDevice = async (data: ITaskDevice, cb: AsyncCallback)
   });
   callback(res, cb, data);
 };
+export const asyncPrintItems = async (data: string[], cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.device}/batch/items`,data).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, data);
+};

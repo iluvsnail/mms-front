@@ -47,12 +47,15 @@ const BatchUploadTable: FC<Props> = ({
               dataIndex: "device",
               render:(v:IDevice)=>v.factoryNumber
           },{
-              title: t("detectedDate"),
-              dataIndex: "detectedDate"
+              title: t("receivedDate"),
+              dataIndex: "receivedDate"
 
           },{
-              title: t("detectedPerson"),
-              dataIndex: "detectedPerson"
+              title: t("sendDetectedPerson"),
+              dataIndex: "sendDetectedPerson"
+          },{
+              title: t("receivedPerson"),
+              dataIndex: "receivedPerson"
           },{
               title: t("common:operations"),
               dataIndex: "OPERATIONS",

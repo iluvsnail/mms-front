@@ -70,7 +70,8 @@ const DeviceType: FC = () => {
             <FormOutlined style={{"margin":"0px 0px 0px 25px"}} onClick={()=>onEdit(it)}/>
 
             <Popconfirm
-                onConfirm={() => onDel(it)}
+                onConfirm={(e) => onDel(it,e)}
+                onCancel={e=>e?.stopPropagation()}
                 title={t("common:confirmDelete")}
             >
               <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}}/>
@@ -86,7 +87,8 @@ const DeviceType: FC = () => {
             {it.name}
             <FormOutlined style={{"margin":"0px 0px 0px 25px"}} onClick={()=>onEdit(it)}/>
             <Popconfirm
-                onConfirm={() => onDel(it)}
+                onConfirm={(e) => onDel(it,e)}
+                onCancel={e=>e?.stopPropagation()}
                 title={t("common:confirmDelete")}
             >
             <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}}/>
@@ -105,7 +107,8 @@ const DeviceType: FC = () => {
             {it.name}
             <FormOutlined style={{"margin":"0px 0px 0px 25px"}} onClick={()=>onEdit(it)}/>
             <Popconfirm
-                onConfirm={() => onDel(it)}
+                onConfirm={(e) => onDel(it,e)}
+                onCancel={e=>e?.stopPropagation()}
                 title={t("common:confirmDelete")}
             >
             <DeleteOutlined style={{"margin":"0px 0px 0px 5px"}}/>
@@ -159,10 +162,12 @@ const DeviceType: FC = () => {
     setFormVisible(false);
   }, []);
 
-  const onDel = useCallback((data: IDeviceType) => {
+  const onDel = useCallback((data: IDeviceType,e) => {
+    if(e)e.stopPropagation();
     asyncDelDeviceType(data, (res) => {
       if (res.isOk) {
         message.success("删除成功");
+        setItem(undefined);
         setList((prev) => prev.filter((p) => p.id !== data.id));
       }
     });
@@ -190,9 +195,10 @@ const DeviceType: FC = () => {
           setLoading(false);
           if (res.isOk) {
             let flg = false;
+            setItem(res.data);
             setList((prev) =>
               prev.map((p) => {
-                if (p.id === data.id) {
+                if (p.id == data.id) {
                   flg=true;
                   return res.data;
                 }
@@ -205,6 +211,7 @@ const DeviceType: FC = () => {
               message.success("新增成功");
             }
             if(!flg){
+              debugger;
               setList((prev) => [res.data, ...prev]);
             }
             onClose();
@@ -217,7 +224,7 @@ const DeviceType: FC = () => {
 
   const onAddDeviceType=useCallback((pt?,level?)=>{
     if(pt && pt.length) setPt(pt)
-    if(level || level =="0") setLevel(level)
+    setLevel(level)
     setFormVisible(true);
   },[])
   const onBindDevice=useCallback((pt?,level?)=>{
@@ -294,7 +301,7 @@ const DeviceType: FC = () => {
                 {item?.name}
               </Form.Item>
               <Form.Item
-                  label={t("standardType")}
+                  label={"规格型号"}
                   name="standardType"
               >
                 {item?.standardType}

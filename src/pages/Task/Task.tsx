@@ -10,7 +10,10 @@ import {
   asyncPutTask,
   asyncGetCodeData,
   asyncDelTasks,
-  asyncLockUsers, asyncFinishTask, asyncFinishTasks, asyncExportTasks
+  asyncLockUsers,
+  asyncFinishTask,
+  asyncFinishTasks,
+  asyncExportTasks
 } from "./task.services";
 import TaskForm from "./TaskForm";
 import { message } from "antd";
@@ -70,7 +73,7 @@ const Task: FC = () => {
     list.map(it=>{
       if(!rst) return;
       its.filter(i=>i==it.id).map(i=>{
-        if(!(it && it.instrumentCount >0 && it.receivedDeviceCount >0 && it.receivedDeviceCount== it.detectedDeviceCount && it.receivedDeviceCount == it.sentDeviceCount)){
+        if(!(it && it.instrumentCount >0 && it.receivedDeviceCount >0 && it.receivedDeviceCount== it.detectedDeviceCount && it.receivedDeviceCount == it.sentDeviceCount)||it.status!="1"){
           rst = false;
           return;
         }
@@ -83,7 +86,7 @@ const Task: FC = () => {
         onRefresh()
       }
     });}else{
-      message.warn("您所选择的任务中存在任务流程未全部完成的任务，请先完成相关任务流程！")
+      message.warn("若您所选择的任务中存在任务流程未全部完成的任务，请先完成相关任务流程;若您所选中的任务中包含已完成任务，无需重复进行完成操作！")
       return false;
 
     }
@@ -97,6 +100,10 @@ const Task: FC = () => {
     });
   }, []);
   const onBatchExport = useCallback((its:string[]) => {
+    if(!its || its.length<1){
+      message.warn("未选中数据");
+      return false;
+    }
     asyncExportTasks(its);
   }, []);
   const onEdit = useCallback((editItem: ITask) => {

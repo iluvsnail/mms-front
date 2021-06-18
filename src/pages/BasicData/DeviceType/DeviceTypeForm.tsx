@@ -25,7 +25,6 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
 
   useEffect(() => {
     if (visible && item && form) {
-      debugger;
       form.setFieldsValue(item);
       setRolesOption({
         id: item?.criterion?.id || '',
@@ -83,7 +82,7 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
             wrapperCol={{ offset: 1, span: 16 }}
         >
           <Form.Item
-              label={t("name")}
+              label={"设备名称"}
               name="name"
               rules={[{ required: true }]}
           >
@@ -91,7 +90,7 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
           </Form.Item>
           {(item?item.level=="2":level=="1")?(<>
           <Form.Item
-              label={t("standardType")}
+              label={"规格型号"}
               name="standardType"
               rules={[{ required: true }]}
           >

@@ -94,3 +94,10 @@ export const asyncPrintItem = async (data: ICertificate, cb: AsyncCallback) => {
   });
   callback(res, cb, data);
 };
+export const asyncPrintItems = async (data: string[], cb: AsyncCallback) => {
+  const res = await YSAxios.post(`${api.certificate}/items/certificates`,data).catch((e) => {
+    message.error(e.message);
+    return e;
+  });
+  callback(res, cb, data);
+};

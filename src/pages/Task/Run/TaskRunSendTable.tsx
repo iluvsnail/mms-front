@@ -18,7 +18,7 @@ interface Props {
   setSelectedRows:(its:string[])=>void;
     onshowSend?:(v:boolean)=>void;
     onBatchReceived?:(its:string[])=>void;
-    onBatchRevoke?:(its:string[])=>void;
+    onBatchRevoke?:(its:string[],sts:string)=>void;
     onBatchSend?:(its:string[])=>void;
     onScan?:()=>void;
     onRevoke:(item:ITaskDevice)=>void;
@@ -109,7 +109,7 @@ const TaskRunSendTable: FC<Props> = ({
                               {t("common:edit")}
                           </Button>):""}
 
-                      {(r.status=='3' && task?.status=='1')?(
+                      {/*{(r.status=='3' && task?.status=='1')?(
                           <Popconfirm
                               onConfirm={() =>onRevoke(r)}
                               title={t("confirmRevoke")}
@@ -117,7 +117,7 @@ const TaskRunSendTable: FC<Props> = ({
                               <Button size="small" title={t("revoke")} type="link">
                                   {t("revoke")}
                               </Button>
-                          </Popconfirm>):""}
+                          </Popconfirm>):""}*/}
                       {r.status=='2' ?(
                           <Button
                               size="small"
@@ -151,7 +151,6 @@ const TaskRunSendTable: FC<Props> = ({
       onShowSend={onshowSend}
       onScan={onScan}
       onBatchReceived={onBatchReceived}
-      onBatchRevoke={onBatchRevoke}
       onBatchSend={onBatchSend}
     />
   );
