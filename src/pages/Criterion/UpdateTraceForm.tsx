@@ -165,7 +165,6 @@ const UpdateTraceForm: FC<Props> = ({ visible, item, onSave, onCancel,datas,its 
               <Form.Item
                   label={t("notes")}
                   name="notes"
-                  rules={[{ required: true }]}
               >
                 <TextArea rows={2} />
               </Form.Item>

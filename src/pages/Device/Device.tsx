@@ -275,7 +275,7 @@ const Device: FC = () => {
       result = result.filter(r => r.lastAuthenticationDate?r.lastAuthenticationDate.toString().includes(params.lastAuthenticationDate as string):false);
     }
     if (params.validDate) {
-      result = result.filter(r => r.validDate.toString().includes(params.validDate as string));
+      result = result.filter(r => r.validDate.toString() >= (params.validDate as string));
     }
     if (params.verifier) {
       result = result.filter(r => r.verifier.toString().includes(params.verifier as string));

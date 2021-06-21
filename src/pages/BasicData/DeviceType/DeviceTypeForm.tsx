@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import {Form, Input, Modal, Radio,Select} from "antd";
+import {Form, Input, InputNumber, Modal, Radio, Select} from "antd";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import log from "loglevel";
@@ -115,9 +115,9 @@ const DeviceTypeForm: FC<Props> = ({ visible, item, onSave, onCancel,pt,level,co
           <Form.Item
               label={t("cycle")}
               name="cycle"
-              rules={[{ required: true }]}
+              rules={[{ required: true}]}
           >
-            <Input />
+            <InputNumber />
           </Form.Item></>):""}
           <div style={{ display: "none" }}>
             <Form.Item label="id" name="id">

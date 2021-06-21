@@ -1,10 +1,8 @@
-import dayjs from "dayjs";
-import {FC, useMemo, useState} from "react";
-import { useTranslation } from "react-i18next";
+import {FC, useMemo} from "react";
+import {useTranslation} from "react-i18next";
 import YSTable from "../../../components/YSTable";
-import { DateTimeFormatString } from "../../../constants/strings";
-import { Button, Popconfirm } from "antd";
-import {IsLock, LockList} from "../../../models/dict";
+import {Button, Popconfirm} from "antd";
+import {IsLock} from "../../../models/dict";
 import {IUser} from "../../../models/user";
 import {IRole} from "../../../models/role";
 import {isAdmin} from "../../../utils/tokenUtils";
@@ -87,19 +85,6 @@ const UserTable: FC<Props> = ({
             dataIndex: "position",
             sorter: (a: IUser, b: IUser) => a.special.localeCompare(b.special),
         },
-
-      /*{
-        title: t("createDate"),
-        dataIndex: "createDate",
-        render: (v: number) => dayjs(v).format(DateFormatString),
-        sorter: (a: IUser, b: IUser) => a.createDate - b.createDate,
-      },
-      {
-        title: t("updateDate"),
-        dataIndex: "updateDate",
-        render: (v: number) => dayjs(v).format(DateFormatString),
-        sorter: (a: IUser, b: IUser) => a.updateDate - b.updateDate,
-      },*/
       {
         title: t("common:operations"),
         dataIndex: "OPERATIONS",
@@ -112,26 +97,29 @@ const UserTable: FC<Props> = ({
               type="link"
             >
               {t("common:edit")}
-            </Button><Popconfirm
-              onConfirm={() => onLock(r)}
-              title={t("common:confirmLock")}
-          >
-              <Button
-                  size="small"
-                  title={t("common:lock")}
-                  type="link"
+            </Button>
+              {r.isLock==IsLock.UnLock?(<Popconfirm
+                  onConfirm={() => onLock(r)}
+                  title={t("common:confirmLock")}
               >
-                  {t("common:lock")}
-              </Button>
-          </Popconfirm>
-              <Popconfirm
-                  onConfirm={() => onUnlock(r)}
-                  title={t("common:confirmUnlock")}
-              >
-                  <Button size="small" title={t("common:unlock")} type="link">
-                      {t("common:unlock")}
+                  <Button
+                      size="small"
+                      title={t("common:lock")}
+                      type="link"
+                  >
+                      {t("common:lock")}
                   </Button>
-              </Popconfirm>
+              </Popconfirm>):""}
+              {
+                  r.isLock==IsLock.Lock?(<Popconfirm
+                      onConfirm={() => onUnlock(r)}
+                      title={t("common:confirmUnlock")}
+                  >
+                      <Button size="small" title={t("common:unlock")} type="link">
+                          {t("common:unlock")}
+                      </Button>
+                  </Popconfirm>):""
+              }
               <Popconfirm
                   onConfirm={() => onResetPassword(r)}
                   title={t("common:confirmResetPassword")}

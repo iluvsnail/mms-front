@@ -37,6 +37,7 @@ import PrintForm from "./PrintForm";
 import {isAdmin} from "../../../utils/tokenUtils";
 import DetailForm from "./DetailForm";
 import ImportDataForm from "./ImportDataForm";
+import {DateTimeFormatString} from "../../../constants/strings";
 
 const TaskRun: FC = () => {
   const [criterionList, setCriterionList] = useState<ICriterion[]>([]);
@@ -151,6 +152,9 @@ const TaskRun: FC = () => {
 
   const filteredCriterionList = useMemo(() => {
     let result = [...criterionList];
+    if (params && params.instrumentName) {
+      result = result.filter(r => r.instrumentName?.includes(params.instrumentName as string));
+    }
     if (codeV && codeV.length>0) {
       result = result.filter(r => {
         for(let idx in codeV){
@@ -160,6 +164,7 @@ const TaskRun: FC = () => {
         }
       });
     }
+
     if(!isAdmin()){
       //仅显示选中结果
       result= result.filter(r=>{
@@ -219,7 +224,7 @@ const TaskRun: FC = () => {
   const filteredTaskDeviceList = useMemo(() => {
     if (deviceParams) {
       let result = [...taskDeviceList];
-      if (deviceParams.showAdded) {
+      if (deviceParams.showAdded || deviceParams.showReceived) {
         result = result.filter(r => r.status == "1" || r.status == "2"|| r.status == "3"|| r.status == "4"|| r.status == "5");
       }
       if (deviceParams.showDetected) {
@@ -270,13 +275,20 @@ const TaskRun: FC = () => {
   const onSave = useCallback(
       (data: ITask) => {
         asyncPutTask(data, (res) => {
+          debugger;
           if (res.isOk) {
             console.log("保存任务信息成功");
+            if(item && res.data && res.data.status=="0" && selectedRows.length>0){
+              item.status = "1";
+              item.instrumentCount=selectedRows.length;
+              setItem(item)
+            }
           }
           //保存标准仪器
           asyncSaveCriterions(selectedRows,data.id,(res)=>{
             if (res.isOk) {
               if(item) item.instrumentCount = selectedDeviceRows.length
+              setItem(res.data)
               message.success("保存成功");
             }
           });
@@ -568,9 +580,11 @@ const TaskRun: FC = () => {
 
   //uploadReport
   const onUploadClose = useCallback(() => {
+    delete uploadItem?.detectedDate
+    delete uploadItem?.validDate
     setUploadItem(undefined);
     setUploadFormVisible(false);
-  }, []);
+  }, [uploadItem]);
 
   const onSaveUpload = useCallback(
       (data: ITaskDevice) => {
@@ -613,7 +627,7 @@ const TaskRun: FC = () => {
           if (res.isOk) {
             setTaskDeviceList((prev) =>
                 prev.map((p) => {
-                  if (p.device.id === data.device.id) {
+                  if (p.device.id == data.device.id) {
                     return res.data;
                   }
                   return p;
@@ -629,6 +643,7 @@ const TaskRun: FC = () => {
   const onDownloadTemplate = useCallback((data: ITaskDevice) => {
     asyncDownloadTemplate(data);
   }, []);
+  const onRefresh = () => loadTaskDeviceData();
   const onBatchRevoke=useCallback((its:string[],sts:string) => {
 
     if(item?.status != "1"){
@@ -654,12 +669,11 @@ const TaskRun: FC = () => {
         return;
       }
     }
+
     asyncBatchRevoke(rst, (res) => {
       if (res.isOk) {
         message.success("操作成功");
-        rst.map(it=>{
-          setTaskDeviceList((prev)=>prev.filter(p=>it!=p.id));
-        })
+        onRefresh();
       }
     });
   },[item,taskDeviceList]);
@@ -782,6 +796,18 @@ const TaskRun: FC = () => {
       },
       [onPrintClose]
   );
+  const onTabsChange=useCallback((ak:string)=>{
+    if(ak == "2"){
+      setDeviceParams((prev)=>{
+        return {showReceived:false}
+      });
+    }
+    if((ak == "3" || ak=="4")){
+      setDeviceParams((prev)=>{
+        return {showReceived:true}
+      });
+    }
+  },[deviceParams])
   return (
       <StyledContainer style={{padding: "24px"}}>
         <>
@@ -835,7 +861,7 @@ const TaskRun: FC = () => {
             </Row>
           </Form>
           <Divider></Divider>
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" onChange={(ak)=>onTabsChange(ak)}>
             <TabPane tab={t("instrument")} key="1">
               <TaskRunCriterionTable
                   data={filteredCriterionList}
