@@ -20,7 +20,7 @@ interface Props {
     onBatchReceived?:(its:string[])=>void;
     onBatchRevoke?:(its:string[],sts:string)=>void;
     onBatchSend?:(its:string[])=>void;
-    onScan?:()=>void;
+    onScanSend?:()=>void;
     onRevoke:(item:ITaskDevice)=>void;
     onSend: (item: ITaskDevice)=> void;
     onEdit: (item: ITaskDevice)=> void;
@@ -33,14 +33,14 @@ const TaskRunSendTable: FC<Props> = ({
     loading,
     setSelectedRows,
                                          onshowSend,
-    onScan,
     onBatchRevoke,
     onBatchReceived,
     onRevoke,
     onSend,
     onEdit,
     onBatchSend,
-    task,onDetail
+    task,onDetail,
+    onScanSend,
 }) => {
   const { t } = useTranslation(["taskdevice","device","task","common", "dict"]);
     const onSelectChange = function (selectedRowKeys:any){
@@ -149,7 +149,7 @@ const TaskRunSendTable: FC<Props> = ({
       columns={columns}
       its={its}
       onShowSend={onshowSend}
-      onScan={onScan}
+      onScanSend={onScanSend}
       onBatchReceived={onBatchReceived}
       onBatchSend={onBatchSend}
     />

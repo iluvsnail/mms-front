@@ -39,6 +39,7 @@ interface Props<RecordType = any> extends TableProps<RecordType> {
     onBatchDel?: (its: string[]) => void; // 设置之后展示删除按钮
     onBatchLock?: (its: string[]) => void;
     onScan?: () => void;
+    onScanSend?: () => void;
     onBatchReceived?: (its: string[]) => void;
     onBatchRevoke?: (its: string[],sts:string) => void;
     onBatchUploadReport?: (its: string[]) => void;
@@ -84,6 +85,7 @@ const YSTable: FC<Props> = ({
                                 onBatchUnlock,
                                 onRefresh,
                                 onScan,
+    onScanSend,
                                 onBatchReceived,
                                 onBatchRevoke,
                                 onBatchUploadReport,
@@ -277,6 +279,12 @@ const YSTable: FC<Props> = ({
                         <Button onClick={() => onScan()} title={t("scan")}
                                 style={{marginLeft: "1rem", cursor: "pointer"}}>
                             {t("scan")}
+                        </Button>
+                    ) : null}
+                    {onScanSend ? (
+                        <Button onClick={() => onScanSend()} title={"扫描发放"}
+                                style={{marginLeft: "1rem", cursor: "pointer"}}>
+                            {t("扫描发放")}
                         </Button>
                     ) : null}
                     {onBatchUploadReport ? (
