@@ -35,6 +35,7 @@ import PrintForm from "./PrintForm";
 import {isAdmin} from "../../../utils/tokenUtils";
 import DetailForm from "./DetailForm";
 import ImportDataForm from "./ImportDataForm";
+import ScanSendForm from "./ScanSendForm";
 
 const TaskRun2: FC = () => {
   const { Option } = Select;
@@ -49,6 +50,7 @@ const TaskRun2: FC = () => {
   const [sendEditVisible, setSendEditFormVisible] = useState(false);
   const [uploadFormVisible, setUploadFormVisible] = useState(false);
   const [scanFormVisible, setScanFormVisible] = useState(false);
+  const [scanSendFormVisible, setScanSendFormVisible] = useState(false);
   const [printVisible, setPrintVisible] = useState(false);
   const [detailVisible, setDetailVisible] = useState(false);
   const [importDataVisible, setImportDataVisible] = useState(false);
@@ -67,6 +69,7 @@ const TaskRun2: FC = () => {
   const [item, setItem] = useState<ITask>();
   const [receivedItem, setReceivedItem] = useState<ITaskDevice>();
   const [scanItem, setScanItem] = useState<ITaskDevice>();
+  const [scanSendItem, setScanSendItem] = useState<ITaskDevice>();
   const [sendItem, setSendItem] = useState<ITaskDevice>();
   const [editItem, setEditItem] = useState<ITaskDevice>();
   const [uploadItem, setUploadItem] = useState<ITaskDevice>();
@@ -382,6 +385,33 @@ const TaskRun2: FC = () => {
         });
       },
       [onScanClose]
+  );
+  const onScanSendClose = useCallback(() => {
+    setScanSendItem(undefined);
+    setScanSendFormVisible(false);
+  }, []);
+
+  const onSaveScanSend = useCallback(
+      (data: ITaskDevice) => {
+        setLoading(true);
+        if(data.status=="2") data.status="3";
+        asyncPutTaskDevice(data, (res) => {
+          setLoading(false);
+          if (res.isOk) {
+            setTaskDeviceList((prev) =>
+                prev.map((p) => {
+                  if (p.device.factoryNumber == data.device.factoryNumber) {
+                    return res.data;
+                  }
+                  return p;
+                })
+            );
+            message.success("操作成功");
+            onScanSendClose();
+          }
+        });
+      },
+      [onScanSendClose]
   );
   const onBatchReceivedSave = useCallback(
       (data: any) => {
@@ -1003,6 +1033,7 @@ const TaskRun2: FC = () => {
           <SendForm  item={editItem} visible={sendEditVisible} onSave={onSaveSendEdit} onCancel={onSendEditClose}></SendForm>
           <UploadReportForm  item={uploadItem} visible={uploadFormVisible} onSave={onSaveUpload} onCancel={onUploadClose}></UploadReportForm>
           <ScanForm  item={scanItem} task={item} visible={scanFormVisible} onSave={onSaveScan} onCancel={onScanClose}></ScanForm>
+          <ScanSendForm  item={scanSendItem} task={item} visible={scanSendFormVisible} onSave={onSaveScanSend} onCancel={onScanSendClose}></ScanSendForm>
           <BatchReceiveForm visible={batchReceiveFormVisible} onSave={onBatchReceivedSave} onCancel={onBatchReceivedClose} datas={batchReceiveTaskDeviceList}/>
           <BatchSendForm visible={batchSendFormVisible} onSave={onBatchSendSave} onCancel={onBatchSendClose} datas={batchSendTaskDeviceList}/>
           <BatchUploadForm visible={batchUploadFormVisible} onSave={onBatchUploadSave} onCancel={onBatchUploadClose} datas={batchUploadTaskDeviceList}/>
