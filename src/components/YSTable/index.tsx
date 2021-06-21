@@ -146,10 +146,15 @@ const YSTable: FC<Props> = ({
                 console.log(info.file, info.fileList);
             }
             if (info.file.status === 'done') {
-                message.success(`数据导入成功！`);
-                if (onRefresh) {
-                    onRefresh();
+                if(info.file.response){
+                    message.warn(info.file.response);
+                }else{
+                    message.success(`数据导入成功！`);
+                    if (onRefresh) {
+                        onRefresh();
+                    }
                 }
+
             } else if (info.file.status === 'error') {
                 message.error(`数据导入失败`);
             }

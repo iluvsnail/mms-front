@@ -24,4 +24,5 @@ export interface IDevice {
   institution:string;
   offset:number;
   base64?:string;
+  message?:string;
 }

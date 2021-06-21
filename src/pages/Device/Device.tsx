@@ -173,6 +173,10 @@ const Device: FC = () => {
         asyncPutDevice(data, (res) => {
           setLoading(false);
           if (res.isOk) {
+            if(res.data.message){
+              message.warn(res.data.message);
+              return ;
+            }
             let flg = false;
             setList((prev) =>
               prev.map((p) => {
