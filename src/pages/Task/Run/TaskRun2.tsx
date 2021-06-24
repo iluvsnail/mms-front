@@ -319,6 +319,7 @@ const TaskRun2: FC = () => {
   }, [form, onSave]);
 
   const onReceiveClose = useCallback(() => {
+    delete receivedItem?.receivedDate
     setReceivedItem(undefined);
     setFormVisible(false);
   }, []);
@@ -487,6 +488,7 @@ const TaskRun2: FC = () => {
   }, []);
 
   const onSendClose = useCallback(() => {
+    delete receivedItem?.sendDate
     setSendItem(undefined);
     setSendFormVisible(false);
   }, []);

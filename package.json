@@ -2,6 +2,7 @@
   "name": "ys-web-boilerplate",
   "description": "YS Web Application Boilerplate",
   "version": "0.1.0",
+  "homepage": "/mms",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.0.0",

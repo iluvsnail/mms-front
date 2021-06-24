@@ -23,7 +23,7 @@ const Data: FC = () => {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
-        message.success(`${info.file.name} 文件上传成功`);
+        message.success(`${info.file.name} 文件上传成功,请重新启动服务！`);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败`);
       }

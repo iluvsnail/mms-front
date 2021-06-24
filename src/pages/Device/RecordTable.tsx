@@ -24,7 +24,7 @@ const RecordTable: FC<Props> = ({
               dataIndex: "task",
               render:(v:ITask)=>v.name,
           },{
-              title: t("task:result"),
+              title: t("检定结论"),
               dataIndex: "result",
               render:(v:string)=>v?t("result"+v):""
           },{

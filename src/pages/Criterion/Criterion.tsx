@@ -25,6 +25,8 @@ import UpdateTraceForm from "./UpdateTraceForm";
 import {BASE_URL} from "../../utils/apiUtils";
 import api from "../../configs/api";
 import DeviceTable from "../Device/DeviceTable";
+import dayjs from "dayjs";
+import {DateFormatString} from "../../constants/strings";
 
 const Criterion: FC = () => {
   const [list, setList] = useState<ICriterion[]>([]);
@@ -109,9 +111,10 @@ const Criterion: FC = () => {
     setDetailVisible(false);
   }, []);
   const onClose = useCallback(() => {
+    delete item?.lastTracingDate
     setItem(undefined);
     setFormVisible(false);
-  }, []);
+  }, [item]);
   const onRecordClose = useCallback(() => {
     setTraceRecord([]);
     setRecordFormVisible(false);
@@ -171,7 +174,7 @@ const Criterion: FC = () => {
       (data:any) => {
         asyncUpdateTrace(data, (res) => {
           if (res.isOk) {{
-              message.success("保存成功");
+              message.success("更新溯源信息成功");
             }
             onUpdateTraceClose();
           }
@@ -215,7 +218,8 @@ const Criterion: FC = () => {
       result = result.filter(r => r.lastTracingUnit.includes(params.lastTracingUnit as string));
     }
     if (params.lastTracingDate) {
-      result = result.filter(r => r.lastTracingDate.toString().includes(params.lastTracingDate as string));
+      params.lastTracingDate=dayjs(params.lastTracingDate as string).format(DateFormatString)
+      result = result.filter(r=>r.lastTracingDate!=null).filter(r => r.lastTracingDate.toString().includes(params.lastTracingDate as string));
     }
     return result;
   }, [params, list]);

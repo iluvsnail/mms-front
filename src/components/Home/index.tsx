@@ -1,6 +1,6 @@
 /** Home内容主页 */
-import { FC, Suspense, useMemo } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import {FC, lazy, Suspense, useMemo} from "react";
+import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import styled from "styled-components";
 import routeConfigs, { HOME_PATH } from "../../configs/routeConfigs";
 import Page404 from "../../pages/404";
@@ -9,6 +9,9 @@ import LoadingPage from "../../pages/LoadingPage";
 import Footer from "../Footer";
 import Header from "../Header";
 import Menu from "../Menu";
+import history from "../../utils/history";
+const Device = lazy(()=>import("../../pages/Device"))
+
 
 const Home: FC = () => {
   const routes = useMemo(
@@ -32,7 +35,12 @@ const Home: FC = () => {
       }),
     []
   );
-
+    const lct = useLocation();
+    if(lct.search){
+        if(lct.search.substring(8)){
+            history.push(lct.search.substring(8))
+        }
+    }
   return (
     <Suspense fallback={<LoadingPage />}>
       <StyledApp>
@@ -46,7 +54,7 @@ const Home: FC = () => {
                   <Redirect from="/" to={HOME_PATH} exact />
                   {routes}
                   <Route path="/error" component={ErrorPage} />
-                  <Route path="/" component={Page404} />
+                  <Route path="/" component={Device} />
                 </Switch>
               </Suspense>
             </StyledRoutes>

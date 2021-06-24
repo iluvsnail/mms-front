@@ -21,7 +21,7 @@ const Config = lazy(()=>import("../pages/System/Config"))
 
 
 // 主页路径
-export const HOME_PATH = "/login";
+export const HOME_PATH = "device/list";
 
 /**
  * 页面/路由配置

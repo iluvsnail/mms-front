@@ -28,6 +28,8 @@ import RecordForm from "./RecordForm";
 import {BASE_URL} from "../../utils/apiUtils";
 import api from "../../configs/api";
 import BatchPrintForm from "./BatchPrintForm";
+import {DateFormatString, DateTimeFormatString} from "../../constants/strings";
+import dayjs from "dayjs";
 
 const Device: FC = () => {
   const [list, setList] = useState<IDevice[]>([]);
@@ -134,9 +136,11 @@ const Device: FC = () => {
     setDetailVisible(false);
   }, []);
   const onClose = useCallback(() => {
+    delete item?.validDate
+    delete item?.lastAuthenticationDate
     setItem(undefined);
     setFormVisible(false);
-  }, []);
+  }, [item]);
   const onRecordClose = useCallback(() => {
     setDeviceRecord([]);
     setRecordFormVisible(false);
@@ -276,9 +280,11 @@ const Device: FC = () => {
       result = result.filter(r => r.manufacturer.includes(params.manufacturer as string));
     }
     if (params.lastAuthenticationDate) {
+      params.lastAuthenticationDate=dayjs(params.lastAuthenticationDate as string).format(DateFormatString)
       result = result.filter(r => r.lastAuthenticationDate?r.lastAuthenticationDate.toString().includes(params.lastAuthenticationDate as string):false);
     }
     if (params.validDate) {
+      params.validDate=dayjs(params.validDate as string).format(DateFormatString)
       result = result.filter(r => r.validDate.toString() >= (params.validDate as string));
     }
     if (params.verifier) {

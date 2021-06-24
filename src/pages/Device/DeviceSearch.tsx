@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import YSSearchBar from "../../components/YSSearchBar";
-import { Select } from "antd";
+import {DatePicker, Select} from "antd";
 import {LockList} from "../../models/dict";
 import {ICodecriterion} from "../../models/codecriterion";
 
@@ -19,7 +19,7 @@ const DeviceSearch: FC<Props> = ({ onSearch ,codes}) => {
                 { name: "deviceName", label: t("deviceName") },
                 {
                     name: "criterion",
-                    label: t("criterion"),
+                    label: t("criterionName"),
                     render: (
                         <Select allowClear placeholder={t("selectCriterion")}>
                             {
@@ -32,8 +32,12 @@ const DeviceSearch: FC<Props> = ({ onSearch ,codes}) => {
                 { name: "standardType", label: t("standardType") },
                 { name: "factoryNumber", label: t("factoryNumber") },
                 { name: "manufacturer", label: t("manufacturer") },
-                { name: "lastAuthenticationDate", label: t("lastAuthenticationDate") },
-                { name: "validDate", label: t("validDate") },
+                { name: "lastAuthenticationDate", label: t("lastAuthenticationDate"),
+                render:(<DatePicker></DatePicker>)},
+                { name: "validDate", label: t("validDate") ,
+                render:(
+                    <DatePicker></DatePicker>
+                )},
                 { name: "verifier", label: t("verifier") },
                 { name: "dutyUnit", label: t("dutyUnit") },
                 { name: "dutyPerson", label: t("dutyPerson") },

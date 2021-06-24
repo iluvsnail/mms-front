@@ -19,6 +19,8 @@ import TaskForm from "./TaskForm";
 import { message } from "antd";
 import TaskDetail from "./TaskDetail";
 import {ITask} from "../../models/task";
+import dayjs from "dayjs";
+import {DateFormatString} from "../../constants/strings";
 
 const Task: FC = () => {
   const [list, setList] = useState<ITask[]>([]);
@@ -125,9 +127,10 @@ const Task: FC = () => {
     setDetailVisible(false);
   }, []);
   const onClose = useCallback(() => {
+    delete item?.startDate
     setItem(undefined);
     setFormVisible(false);
-  }, []);
+  }, [item]);
 
   const onDel = useCallback((data: ITask) => {
     asyncDelTask(data, (res) => {
@@ -200,6 +203,17 @@ const Task: FC = () => {
     }
     if (params.createUser) {
       result = result.filter(r => r.createUser.includes(params.createUser as string));
+    }
+    if (params.createUser) {
+      result = result.filter(r => r.createUser.includes(params.createUser as string));
+    }
+    if (params.startDate) {
+      params.startDate=dayjs(params.startDate as string).format(DateFormatString)
+      result = result.filter(r => (r.startDate) >= (params.startDate as string));
+    }
+    if (params.finishDate) {
+      params.finishDate=dayjs(params.finishDate as string).format(DateFormatString)
+      result = result.filter(r => (r.startDate) <= (params.finishDate as string));
     }
     return result;
   }, [params, list]);

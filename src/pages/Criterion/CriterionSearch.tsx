@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import YSSearchBar from "../../components/YSSearchBar";
-import { Select } from "antd";
+import {DatePicker, Select} from "antd";
 import {LockList} from "../../models/dict";
 import {ICodecriterion} from "../../models/codecriterion";
 
@@ -44,7 +44,7 @@ const CriterionSearch: FC<Props> = ({ onSearch ,codes}) => {
                     ),
                 },
                 { name: "lastTracingUnit", label: t("lastTracingUnit") },
-                { name: "lastTracingDate", label: t("lastTracingDate") },
+                { name: "lastTracingDate", label: t("lastTracingDate"),render:(<DatePicker/>) },
             ]}
             onSearch={onSearch}
         />

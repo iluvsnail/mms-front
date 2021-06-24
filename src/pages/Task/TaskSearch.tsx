@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import YSSearchBar from "../../components/YSSearchBar";
-import { Select } from "antd";
+import {DatePicker, Select} from "antd";
 import {LockList} from "../../models/dict";
 import {ICodecriterion} from "../../models/codecriterion";
 
@@ -35,8 +35,8 @@ const TaskSearch: FC<Props> = ({ onSearch ,codes}) => {
                     ),
                 },
                 { name: "dutyPerson", label: t("dutyPerson") },
-                { name: "startDate", label: t("startDate") },
-                { name: "finishDate", label: t("finishDate") },
+                { name: "startDate", label: t("startDate") ,render:(<DatePicker></DatePicker>)},
+                { name: "finishDate", label: t("finishDate") ,render:(<DatePicker></DatePicker>) },
             ]}
             onSearch={onSearch}
         />

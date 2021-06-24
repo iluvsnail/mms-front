@@ -317,9 +317,10 @@ const TaskRun: FC = () => {
   }, [form, onSave]);
 
   const onReceiveClose = useCallback(() => {
+    delete receivedItem?.receivedDate
     setReceivedItem(undefined);
     setFormVisible(false);
-  }, []);
+  }, [receivedItem]);
 
   const onSaveReceive = useCallback(
       (data: ITaskDevice) => {
@@ -486,6 +487,7 @@ const TaskRun: FC = () => {
   }, []);
 
   const onSendClose = useCallback(() => {
+    delete receivedItem?.sendDate
     setSendItem(undefined);
     setSendFormVisible(false);
   }, []);

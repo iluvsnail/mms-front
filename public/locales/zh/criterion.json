@@ -32,7 +32,7 @@
   "batchImport": "导入",
   "batchExport": "导出",
   "selectCriterion": "选择标准",
-  "criterion": "所属标准",
+  "criterion": "标准名称",
   "selectStatus": "选择状态",
   "lastTracingUnit": "末次溯源单位",
   "lastTracingDate": "末次溯源日期",
