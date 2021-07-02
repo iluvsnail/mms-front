@@ -873,7 +873,7 @@ const TaskRun: FC = () => {
               <Col span={5}><Form.Item
                   label={t("finishDate")}
               >
-                {item?.finishDate}
+                {item?.status=="2"?item?.finishDate:""}
               </Form.Item></Col>
               <Col span={4}><Form.Item
                   label={t("currentStatus")}
